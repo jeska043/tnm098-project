@@ -1,0 +1,30 @@
+html, body{
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+}
+
+#content{
+    width: 100%;
+    height: 100%;
+}
+
+#spinner{
+    border: 10px solid #ecececce; /* Light grey */
+    border-top: 10px solid #3a3a3ae1; /* Blue */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin{
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#myButton{
+    position: absolute;
+    left: 20px;
+    top: 510px;
+}
