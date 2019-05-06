@@ -32,7 +32,7 @@ var svg = d3.select("#content")
 
 // Append background image
 svg.append("image")
-.attr("xlink:href","/images/StHimarkMapBlank.png")
+.attr("xlink:href","./images/StHimarkMapBlank.png")
 .attr("x", 0)
 .attr("y", 0)
 .attr("width", imageWidth)
@@ -72,7 +72,7 @@ var maxMobileLimit = 250;
 
 // Get static sensor data
 console.log("Getting static sensor locations.");
-d3.csv("/data/StaticSensorLocations.csv").then(function(array){
+d3.csv("./data/StaticSensorLocations.csv").then(function(array){
   array.forEach(element => {
     staticSensorLocations[element["Sensor-id"]] = [parseFloat(element.Long), parseFloat(element.Lat)];
   });
@@ -80,7 +80,7 @@ d3.csv("/data/StaticSensorLocations.csv").then(function(array){
 })
 .then(function(){
   console.log("Getting static sensor readings.");
-  d3.csv("/data/StaticSensorReadings.csv").then(function(array){
+  d3.csv("./data/StaticSensorReadings.csv").then(function(array){
     array.forEach(element => {
       if(staticSensorLocations[element["Sensor-id"]]){
         var value = parseFloat(element.Value);
@@ -140,7 +140,7 @@ d3.csv("/data/StaticSensorLocations.csv").then(function(array){
 
 // Get mobile sensor data
 console.log("Getting mobile sensor readings.");
-d3.csv("/data/MobileSensorReadings.csv").then(function(array){
+d3.csv("./data/MobileSensorReadings.csv").then(function(array){
   array.forEach(element => {
     var value = parseFloat(element.Value);
     // Clamp unreasonable values
