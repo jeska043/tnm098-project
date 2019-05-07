@@ -10,8 +10,8 @@ html, body{
 }
 
 #spinner{
-    border: 10px solid #ecececce; /* Light grey */
-    border-top: 10px solid #3a3a3ae1; /* Blue */
+    border: 10px solid #ecececce;
+    border-top: 10px solid #3a3a3ae1;
     border-radius: 50%;
     width: 40px;
     height: 40px;
