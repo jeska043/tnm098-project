@@ -28,3 +28,34 @@ html, body{
     left: 20px;
     top: 510px;
 }
+
+  .bar-static rect {
+    fill: rgb(0, 0, 200);
+    shape-rendering: crispEdges;
+    opacity: 0.7;
+  }
+
+  .bar-mobile rect {
+    fill: rgb(0, 200, 0);
+    shape-rendering: crispEdges;
+    opacity: 0.9;
+  }
+  
+  .bar text {
+    fill: #fff;
+  }
+  
+  .axis path, .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
+
+  .histogram {
+      margin-left: 10px;
+      border: 1px solid black;
+  }
+
+  .map{
+      border: 1px solid black;
+  }
