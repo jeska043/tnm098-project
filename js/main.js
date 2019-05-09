@@ -17,6 +17,45 @@ var maxLong = -119.711751;
 var minLat = 0;
 var maxLat = 0.238585;
 
+  // Timeslider
+  var date = "2020-04-06 00:00:00";
+  hoursToAdd = 2;
+  var formatTime = d3.timeFormat("%Y-%m-%d %H:%M:%S");
+
+  var dataTime = d3.range(0, 5).map(function(d) {
+    return new Date(2020, 3, 6+d);
+  });
+
+  var maxDate = d3.range(0, 5).map(function(d) {
+    return new Date(2020, 3, 10, 22 );
+  });
+
+  var sliderTime = d3
+    .sliderBottom()
+    .min(d3.min(dataTime))
+    .max(d3.max(maxDate))
+    .step(60 * 60 * 1000)
+    .width(400)
+    .tickFormat('')
+    .tickValues(dataTime)
+    .default(new Date(2020, 3, 6))
+    .on('onchange', val => {
+      d3.select('p#value-time').text(formatTime(val));
+      timeSliderChange(formatTime(val));
+    });
+
+  var gTime = d3
+    .select('div#slider-time')
+    .append('svg')
+    .attr('width', 500)
+    .attr('height', 100)
+    .append('g')
+    .attr('transform', 'translate(30,30)');
+
+  gTime.call(sliderTime);
+
+  d3.select('p#value-time').text(formatTime(sliderTime.value()));
+
 // Nuclear plant position
 var nuclearPlantLat = 0.162679;
 var nuclearPlantLong = -119.784825;
@@ -193,11 +232,69 @@ d3.csv("./data/MobileSensorReadings.csv").then(function(array){
   console.error(e);
 });
 
-var date = "2020-04-06 00:00:00";
-hoursToAdd = 2;
-var formatTime = d3.timeFormat("%Y-%m-%d %H:%M:%S");
 
+/*
 function buttonOnClick(){
+  console.log(date);
+  var staticData = staticSensorReadings[date];
+  var mobileData = mobileSensorReadings[date];
+
+  d3.selectAll("circle").remove();
+
+  // Append nuclear plant
+  svg.append("circle")
+  .attr("cx", nuclearPlantX)
+  .attr("cy", nuclearPlantY)
+  .attr("r", nuclearPlantRadius)
+  .style("fill", "yellow")
+  .style("stroke", "black")
+  .style("fill-opacity", 1);
+  svg.append("circle")
+  .attr("cx", nuclearPlantX)
+  .attr("cy", nuclearPlantY)
+  .attr("r", 1)
+  .style("fill", "black");
+
+  for(i = 0; i < staticData.length; i++){
+    var reading = staticData[i];
+    var xPos = (reading.Long-minLong)/(maxLong-minLong)*imageWidth;
+    var yPos = (1-(reading.Lat-minLat)/(maxLat-minLat))*imageHeight;
+    svg.append("circle")
+    .attr("cx", xPos)
+    .attr("cy", yPos)
+    .attr("r", sensorRadius)
+    .style("fill", "red")
+    .style("fill-opacity", (reading.Value-minStaticValue)/(maxStaticValue-minStaticValue));
+    svg.append("circle")
+    .attr("cx", xPos)
+    .attr("cy", yPos)
+    .attr("r", 1)
+    .style("fill", "black");
+  }
+
+  
+
+  for(i = 0; i < mobileData.length; i++){
+    var reading = mobileData[i];
+    var xPos = (reading.Long-minLong)/(maxLong-minLong)*imageWidth;
+    var yPos = (1-(reading.Lat-minLat)/(maxLat-minLat))*imageHeight;
+    svg.append("circle")
+    .attr("cx", xPos)
+    .attr("cy", yPos)
+    .attr("r", sensorRadius)
+    .style("fill", "red")
+    .style("fill-opacity", (reading.Value-minMobileValue)/(maxMobileValue-minMobileValue));
+  }
+
+  var newDate = new Date(date);
+  newDate.setTime(newDate.getTime() + (hoursToAdd*60*60*1000));
+  if(newDate.getTime() <= 1586555985000){
+    date = formatTime(newDate);
+  }
+}
+*/
+
+function timeSliderChange(date){
   console.log(date);
   var staticData = staticSensorReadings[date];
   var mobileData = mobileSensorReadings[date];
@@ -245,12 +342,6 @@ function buttonOnClick(){
     .attr("r", sensorRadius)
     .style("fill", "red")
     .style("fill-opacity", (reading.Value-minMobileValue)/(maxMobileValue-minMobileValue));
-  }
-
-  var newDate = new Date(date);
-  newDate.setTime(newDate.getTime() + (hoursToAdd*60*60*1000));
-  if(newDate.getTime() <= 1586555985000){
-    date = formatTime(newDate);
   }
 }
 
