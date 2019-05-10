@@ -1,0 +1,91 @@
+html, body{
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+}
+
+#content{
+    width: 100%;
+    height: 100%;
+}
+
+#spinner{
+    border: 10px solid #ecececce;
+    border-top: 10px solid #3a3a3ae1;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin{
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+  .bar-static rect {
+    fill: rgb(0, 0, 200);
+    shape-rendering: crispEdges;
+    opacity: 0.7;
+  }
+
+  .bar-mobile rect {
+    fill: rgb(0, 200, 0);
+    shape-rendering: crispEdges;
+    opacity: 0.9;
+  }
+  
+  .bar text {
+    fill: #fff;
+  }
+  
+  .axis path, .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
+
+  .histogram {
+      position: absolute;
+      margin-left: 10px;
+      border: 1px solid black;
+  }
+
+  .map{
+      border: 1px solid black;
+  }
+
+#timeslider {
+    position: absolute;
+    top: 90%;
+    height: 10%;
+    width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#timebox {
+    position: absolute;
+    z-index: 999;
+    top: 40px;
+}
+
+#value-time{
+    position: absolute;
+    left: 100px;
+    font-size: xx-small;
+    font-weight: bold;
+}
+
+#sizeslider {
+    position: relative;
+    top: 90%;
+    height: 10%;
+    width: 800px;
+}
+
+#value-size {
+    top: 0px;
+    height: 50%;
+    width: 100%;
+}

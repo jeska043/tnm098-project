@@ -1,9 +1,8 @@
+// Image size
 var imageWidth = 995;
 var imageHeight = 823;
 
 var scaling = 0.6;
-
-// Do the scaling
 imageWidth *= scaling;
 imageHeight *= scaling;
 
@@ -63,12 +62,20 @@ var nuclearPlantLong = -119.784825;
 var nuclearPlantX = (nuclearPlantLong-minLong)/(maxLong-minLong)*imageWidth;
 var nuclearPlantY = (1-(nuclearPlantLat-minLat)/(maxLat-minLat))*imageHeight;
 
+// Sensor values outside these limits will be discarded.
+// Use the histogram to decide these.
+var minStaticLimit = 0;
+var maxStaticLimit = 40;
+
+var minMobileLimit = 0;
+var maxMobileLimit = 100;
+
 // Create SVG
 var svg = d3.select("#content")
 .append("svg")
 .attr("width", imageWidth)
 .attr("height", imageHeight)
-.style("border", "1px solid black");
+.attr("class", "map");
 
 // Append background image
 svg.append("image")
@@ -94,21 +101,14 @@ svg.append("circle")
 
 var staticSensorLocations = {};
 var staticSensorReadings = {};
-var minStaticValue;
-var maxStaticValue;
-
 var mobileSensorReadings = {};
-var minMobileValue;
-var maxMobileValue;
 
 var staticDataLoaded = false;
 var mobileDataLoaded = false;
 
-var minStaticLimit = 0;
-var maxStaticLimit = 100;
-
-var minMobileLimit = 0;
-var maxMobileLimit = 250;
+// For the histogram
+var staticValues = [];
+var mobileValues = [];
 
 // Get static sensor data
 console.log("Getting static sensor locations.");
@@ -124,42 +124,24 @@ d3.csv("./data/StaticSensorLocations.csv").then(function(array){
     array.forEach(element => {
       if(staticSensorLocations[element["Sensor-id"]]){
         var value = parseFloat(element.Value);
-        // Clamp unreasonable values
-        if(value < minStaticLimit){
-          value = minStaticLimit;
-        }
-        else if(value > maxStaticLimit){
-          value = maxStaticLimit;
-        }
-        var reading = {
-          "Long": staticSensorLocations[element["Sensor-id"]][0],
-          "Lat": staticSensorLocations[element["Sensor-id"]][1],
-          "Value": value
-        };
-        // Save the reading
-        if(staticSensorReadings[element.Timestamp]){
-          staticSensorReadings[element.Timestamp].push(reading);
-        }
-        else{
-          staticSensorReadings[element.Timestamp] = [reading];
-        }
-        // Save min and max values
-        if(minStaticValue){
-          if(value < minStaticValue){
-            minStaticValue = value;
-          }
-        }
-        else{
-          minStaticValue = value;
-        }
 
-        if(maxStaticValue){
-          if(value > maxStaticValue){
-            maxStaticValue = value;
+        // Only save the reading if it's within the specified range
+        if(value >= minStaticLimit && value <= maxStaticLimit){
+          // Save value for histogram
+          staticValues.push(value);
+
+          var reading = {
+            "Long": staticSensorLocations[element["Sensor-id"]][0],
+            "Lat": staticSensorLocations[element["Sensor-id"]][1],
+            "Value": value
+          };
+          // Save the reading
+          if(staticSensorReadings[element.Timestamp]){
+            staticSensorReadings[element.Timestamp].push(reading);
           }
-        }
-        else{
-          maxStaticValue = value;
+          else{
+            staticSensorReadings[element.Timestamp] = [reading];
+          }
         }
       }
     });
@@ -183,42 +165,24 @@ console.log("Getting mobile sensor readings.");
 d3.csv("./data/MobileSensorReadings.csv").then(function(array){
   array.forEach(element => {
     var value = parseFloat(element.Value);
-    // Clamp unreasonable values
-    if(value < minMobileLimit){
-      value = minMobileLimit;
-    }
-    else if(value > maxMobileLimit){
-      value = maxMobileLimit;
-    }
-    var reading = {
-      "Long": parseFloat(element.Long),
-      "Lat": parseFloat(element.Lat),
-      "Value": value
-    };
-    // Save the reading
-    if(mobileSensorReadings[element.Timestamp]){
-      mobileSensorReadings[element.Timestamp].push(reading);
-    }
-    else{
-      mobileSensorReadings[element.Timestamp] = [reading];
-    }
-    // Save min and max values
-    if(minMobileValue){
-      if(value < minMobileValue){
-        minMobileValue = value;
-      }
-    }
-    else{
-      minMobileValue = value;
-    }
 
-    if(maxMobileValue){
-      if(value > maxMobileValue){
-        maxMobileValue = value;
+    // Only save the reading if it's within the specified range
+    if(value >= minMobileLimit && value <= maxMobileLimit){
+      // Save value for histogram
+      mobileValues.push(value);
+
+      var reading = {
+        "Long": parseFloat(element.Long),
+        "Lat": parseFloat(element.Lat),
+        "Value": value
+      };
+      // Save the reading
+      if(mobileSensorReadings[element.Timestamp]){
+        mobileSensorReadings[element.Timestamp].push(reading);
       }
-    }
-    else{
-      maxMobileValue = value;
+      else{
+        mobileSensorReadings[element.Timestamp] = [reading];
+      }
     }
   });
   //console.log("minMobile: " + minMobileValue);
@@ -265,7 +229,7 @@ function buttonOnClick(){
     .attr("cy", yPos)
     .attr("r", sensorRadius)
     .style("fill", "red")
-    .style("fill-opacity", (reading.Value-minStaticValue)/(maxStaticValue-minStaticValue));
+    .style("fill-opacity", (reading.Value-minStaticLimit)/(maxStaticLimit-minStaticLimit));
     svg.append("circle")
     .attr("cx", xPos)
     .attr("cy", yPos)
@@ -284,7 +248,7 @@ function buttonOnClick(){
     .attr("cy", yPos)
     .attr("r", sensorRadius)
     .style("fill", "red")
-    .style("fill-opacity", (reading.Value-minMobileValue)/(maxMobileValue-minMobileValue));
+    .style("fill-opacity", (reading.Value-minMobileLimit)/(maxMobileLimit-minMobileLimit));
   }
 
   var newDate = new Date(date);
@@ -325,7 +289,7 @@ function timeSliderChange(date){
     .attr("cy", yPos)
     .attr("r", sensorRadius)
     .style("fill", "red")
-    .style("fill-opacity", (reading.Value-minStaticValue)/(maxStaticValue-minStaticValue));
+    .style("fill-opacity", (reading.Value-minStaticLimit)/(maxStaticLimit-minStaticLimit));
     svg.append("circle")
     .attr("cx", xPos)
     .attr("cy", yPos)
@@ -342,7 +306,7 @@ function timeSliderChange(date){
     .attr("cy", yPos)
     .attr("r", sensorRadius)
     .style("fill", "red")
-    .style("fill-opacity", (reading.Value-minMobileValue)/(maxMobileValue-minMobileValue));
+    .style("fill-opacity", (reading.Value-minMobileLimit)/(maxMobileLimit-minMobileLimit));
   }
 }
 
@@ -350,5 +314,6 @@ function checkLoadStatus(){
   if(staticDataLoaded && mobileDataLoaded){
     document.getElementById("loader").style.display = 'none';
     document.getElementById("content").style.display = 'block';
+    generateHistogram(staticValues, mobileValues);
   }
 }
