@@ -89,3 +89,9 @@ html, body{
     height: 50%;
     width: 100%;
 }
+
+.buttons{
+  position: absolute;
+  top: 460px;
+  left: 20px;
+}
