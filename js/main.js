@@ -37,7 +37,8 @@ var maxLat = 0.238585;
     .step(60 * 60 * 1000)
     .width(400)
     .tickFormat('')
-    .tickValues(dataTime)
+    .tickValues('')
+    .displayValue(false)
     .default(new Date(2020, 3, 6))
     .on('onchange', val => {
       d3.select('p#value-time').text(formatTime(val));
