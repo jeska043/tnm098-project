@@ -45,8 +45,9 @@ html, body{
 }
 
 #value-time{
-    position: absolute;
-    left: 100px;
+    width: 100%;
+    text-align: center; 
+    left: 300px;
     font-size: xx-small;
     font-weight: bold;
 }
