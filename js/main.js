@@ -34,7 +34,7 @@ var maxLat = 0.238585;
     .min(d3.min(dataTime))
     .max(d3.max(maxDate))
     .step(2 * 60 * 60 * 1000)
-    .width(400)
+    .width(550)
     .tickFormat('')
     .tickValues('')
     .displayValue(false)
@@ -47,10 +47,10 @@ var maxLat = 0.238585;
   var gTime = d3
     .select('div#slider-time')
     .append('svg')
-    .attr('width', 500)
-    .attr('height', 100)
+    .attr('width', 600)
+    .attr('height', 40)
     .append('g')
-    .attr('transform', 'translate(30,30)');
+    .attr('transform', 'translate(30,7)');
 
   gTime.call(sliderTime);
 
