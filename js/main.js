@@ -40,8 +40,11 @@ var maxLat = 0.238585;
     .displayValue(false)
     .default(new Date(2020, 3, 6))
     .on('onchange', val => {
-      d3.select('p#value-time').text(formatTime(val));
-      timeSliderChange(formatTime(val));
+      var newDate = formatTime(val);
+      if(newDate !== currentDate){
+        d3.select('p#value-time').text(newDate);
+        updateVisualization(newDate);
+      }
     });
 
   var gTime = d3
@@ -261,8 +264,8 @@ function buttonOnClick(){
 var showingCurrentValues = true;
 var currentDate;
 
-function timeSliderChange(date){
-  console.log(date);
+function updateVisualization(date){
+  //console.log(date);
   currentDate = date;
 
   d3.selectAll("circle").remove();
@@ -356,7 +359,6 @@ function timeSliderChange(date){
     }
   }
   
-
 }
 
 function checkLoadStatus(){
@@ -364,8 +366,7 @@ function checkLoadStatus(){
     document.getElementById("loader").style.display = 'none';
     document.getElementById("content").style.display = 'block';
     generateHistogram(staticValues, mobileValues);
-    currentDate = "2020-04-06 00:00:00";
-    timeSliderChange(currentDate);
+    updateVisualization("2020-04-06 00:00:00");
   }
 }
 
@@ -376,7 +377,7 @@ function showCurrentValues(){
 
   if(!showingCurrentValues){
     showingCurrentValues = true;
-    timeSliderChange(currentDate);
+    updateVisualization(currentDate);
   }
 }
 
@@ -385,7 +386,7 @@ function showAccumulatedValues(){
 
   if(showingCurrentValues){
     showingCurrentValues = false;
-    timeSliderChange(currentDate);
+    updateVisualization(currentDate);
   }
 }
 
