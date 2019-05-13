@@ -93,8 +93,23 @@ html, body{
     width: 100%;
 }
 
-.buttons{
+.accu-label{
   position: absolute;
-  top: 460px;
+  top: 500px;
   left: 20px;
+  font-weight: bold;
+}
+
+.accu-label:hover{
+  cursor: pointer;
+}
+
+.accu-checkbox{
+  width: 16px;
+  height: 16px;
+  margin-left: 10px;
+}
+
+.accu-checkbox:hover{
+  cursor: pointer;
 }

@@ -218,22 +218,20 @@ d3.csv("./data/MobileSensorReadings.csv").then(function(array){
   console.log("Mobile sensor readings retrieved.");
   mobileDataLoaded = true;
   checkLoadStatus();
-  //console.log(Object.keys(sensorData).length);
 })
 .catch(function(e){
   console.error(e);
 });
 
-var showingCurrentValues = true;
+var accumulating = false;
 var currentDate;
 
 function updateVisualization(date){
-  //console.log("new date: " + date);
   d3.selectAll(".current-sensor").remove();
 
-  if(showingCurrentValues){
-    d3.selectAll(".accu-sensor").remove();
+  if(!accumulating){
     // Show values for the selected date only
+    d3.selectAll(".accu-sensor").remove();
     var staticData = staticSensorReadings[date];
     var mobileData = mobileSensorReadings[date];
   
@@ -306,20 +304,6 @@ function checkLoadStatus(){
   }
 }
 
-function showCurrentValues(){
-  if(!showingCurrentValues){
-    showingCurrentValues = true;
-    updateVisualization(currentDate);
-  }
-}
-
-function showAccumulatedValues(){
-  if(showingCurrentValues){
-    showingCurrentValues = false;
-    updateVisualization(currentDate);
-  }
-}
-
 function getDatesUpUntil(date){
   var selectedDate = new Date(date);
   var dates = [];
@@ -371,4 +355,14 @@ function drawAccuCircles(date){
       .style("fill", "red")
       .style("fill-opacity", opacityFactor * (reading.Value - minMobileLimit) / (maxMobileLimit - minMobileLimit));
   }
+}
+
+function toggleAccumulate(checkbox){
+  if(checkbox.checked){
+    accumulating = true;
+  }
+  else{
+    accumulating = false;
+  }
+  updateVisualization(currentDate);
 }
