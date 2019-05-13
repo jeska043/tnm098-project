@@ -11,8 +11,10 @@ svgHeight *= scaling;
 
 // Chart specifications
 var margin = {top: 10, right: 30, bottom: 30, left: 50},
-    chartWidth = svgWidth - margin.left - margin.right,
-    chartHeight = svgHeight - margin.top - margin.bottom;
+    histogramWidth = svgWidth - margin.left - margin.right,
+    histogramHeight = svgHeight - margin.top - margin.bottom;
+
+var xScale;
 
 function generateHistogram(staticValues, mobileValues){
     //var minValue = Math.min(minStaticLimit, minMobileLimit);
@@ -24,11 +26,11 @@ function generateHistogram(staticValues, mobileValues){
     var histogramMax = maxValue;
 
     // Construct a new continuous x-scale with the specified domain and range
-    var xScale = d3.scaleLinear()
+    xScale = d3.scaleLinear()
     .domain([xMin, xMax])
-    .range([0, chartWidth]);
+    .range([0, histogramWidth]);
     // Now xScale(xMin) = 0
-    // and xScale(xMax) = chartWidth
+    // and xScale(xMax) = histogramWidth
 
     // Create thresholds for the histogram
     var thresholds = [];
@@ -74,35 +76,36 @@ function generateHistogram(staticValues, mobileValues){
     // Construct the y-scale. Remember that y is upside down => the highest value should have y-position 0.
     var yScale = d3.scaleLinear()
     .domain([0, maxCount])
-    .range([chartHeight, 0]);
-    // Now yScale(0) = chartHeight
+    .range([histogramHeight, 0]);
+    // Now yScale(0) = histogramHeight
     // and yScale(maxCount) = 0
 
     // Construct a new left-oriented axis generator for the given scale
     var yAxis = d3.axisLeft(yScale);
 
     // Create SVG
-    var svg = d3.select("#content").append("svg")
+    var histogram = d3.select("#content").append("svg")
     .attr("width", svgWidth)
     .attr("height", svgHeight)
     .attr("class", "histogram")
+    .attr("id", "histo")
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     // Draw x-axis
-    svg.append("g")
+    histogram.append("g")
     .attr("class", "x axis")
-    .attr("transform", "translate(0," + chartHeight + ")")
+    .attr("transform", "translate(0," + histogramHeight + ")")
     .call(xAxis);
 
     // Draw y-axis
-    svg.append("g")
+    histogram.append("g")
     .attr("class", "y axis")
     .attr("transform", "translate(0,0)")
     .call(yAxis);
 
     // Append a "bar-mobile" class to every bin in mobileBins and define how they should be translated
-    var barMobile = svg.selectAll(".bar-mobile")
+    var barMobile = histogram.selectAll(".bar-mobile")
     .data(mobileBins)
     .enter().append("g")
     .attr("class", "bar-mobile")
@@ -111,10 +114,10 @@ function generateHistogram(staticValues, mobileValues){
     barMobile.append("rect")
     .attr("x", 1)
     .attr("width", binWidthPixels - 1)
-    .attr("height", function(d) { return chartHeight - yScale(d.length); });
+    .attr("height", function(d) { return histogramHeight - yScale(d.length); });
 
     // Append a "bar-static" class to every bin in staticBins and define how they should be translated
-    var barStatic = svg.selectAll(".bar-static")
+    var barStatic = histogram.selectAll(".bar-static")
     .data(staticBins)
     .enter().append("g")
     .attr("class", "bar-static")
@@ -123,5 +126,6 @@ function generateHistogram(staticValues, mobileValues){
     barStatic.append("rect")
     .attr("x", 1)
     .attr("width", binWidthPixels - 1)
-    .attr("height", function(d) { return chartHeight - yScale(d.length); });
+    .attr("height", function(d) { return histogramHeight - yScale(d.length); });
+    return histogram;
 }

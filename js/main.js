@@ -225,9 +225,13 @@ d3.csv("./data/MobileSensorReadings.csv").then(function(array){
 
 var accumulating = false;
 var currentDate;
+var histogram;
 
 function updateVisualization(date){
+  currentDate = date;
   d3.selectAll(".current-sensor").remove();
+  d3.selectAll(".static-line").remove();
+  d3.selectAll(".mobile-line").remove();
 
   if(!accumulating){
     // Show values for the selected date only
@@ -247,6 +251,9 @@ function updateVisualization(date){
       .attr("r", currentSensorRadius)
       .style("fill", "url(#myGradient)")
       .style("fill-opacity", (reading.Value-minStaticLimit)/(maxStaticLimit-minStaticLimit));
+      if(showStaticValues){
+        drawStaticLine(reading.Value);
+      }  
     }
   
     // Current mobile data
@@ -261,6 +268,9 @@ function updateVisualization(date){
       .attr("r", currentSensorRadius)
       .style("fill", "url(#myGradient)")
       .style("fill-opacity", (reading.Value-minMobileLimit)/(maxMobileLimit-minMobileLimit));
+      if(showMobileValues){
+        drawMobileLine(reading.Value);
+      }
     }
   }
   else{
@@ -291,15 +301,22 @@ function updateVisualization(date){
     for(var i = 0; i < datesToDraw.length; i++){
       drawAccuCircles(datesToDraw[i]);
     }
+    // Histogram lines
+    if(showStaticValues){
+      drawStaticLines(date);
+    }
+    if(showMobileValues){
+      drawMobileLines(date);
+    }
   }
-  currentDate = date;
+  
 }
 
 function checkLoadStatus(){
   if(staticDataLoaded && mobileDataLoaded){
     document.getElementById("loader").style.display = 'none';
     document.getElementById("content").style.display = 'block';
-    generateHistogram(staticValues, mobileValues);
+    histogram = generateHistogram(staticValues, mobileValues);
     updateVisualization("2020-04-06 00:00:00");
   }
 }
@@ -338,7 +355,7 @@ function drawAccuCircles(date){
       .attr("cy", yPos)
       .attr("r", accuSensorRadius)
       .style("fill", "red")
-      .style("fill-opacity", opacityFactor * (reading.Value - minStaticLimit) / (maxStaticLimit - minStaticLimit));
+      .style("fill-opacity", opacityFactor * (reading.Value - minStaticLimit) / (maxStaticLimit - minStaticLimit)); 
   }
 
   // Draw mobile sensors
@@ -358,11 +375,56 @@ function drawAccuCircles(date){
 }
 
 function toggleAccumulate(checkbox){
-  if(checkbox.checked){
-    accumulating = true;
-  }
-  else{
-    accumulating = false;
-  }
+  accumulating = checkbox.checked;
   updateVisualization(currentDate);
+}
+
+var showStaticValues = false;
+function toggleShowStaticValues(checkbox){
+  showStaticValues = checkbox.checked;
+  updateVisualization(currentDate);
+}
+
+var showMobileValues = false;
+function toggleShowMobileValues(checkbox){
+  showMobileValues = checkbox.checked;
+  updateVisualization(currentDate);
+}
+
+function drawStaticLine(value){
+  if(value > 0){
+    histogram.append("line")
+    .attr("class", "static-line")
+    .attr("x1", xScale(value))
+    .attr("y1", 0)
+    .attr("x2", xScale(value))
+    .attr("y2", histogramHeight)
+    .attr("style", "stroke:rgba(0,0,200,0.9);stroke-width:1");
+  }
+}
+
+function drawMobileLine(value){
+  if(value > 0){
+    histogram.append("line")
+    .attr("class", "mobile-line")
+    .attr("x1", xScale(value))
+    .attr("y1", 0)
+    .attr("x2", xScale(value))
+    .attr("y2", histogramHeight)
+    .attr("style", "stroke:rgba(0,200,0,0.9);stroke-width:1");
+  }
+}
+
+function drawStaticLines(date){
+  var staticData = staticSensorReadings[date];
+  for (var i = 0; i < staticData.length; i++) { 
+    drawStaticLine(staticData[i].Value);  
+  }
+}
+
+function drawMobileLines(date){
+  var mobileData = mobileSensorReadings[date];
+  for (var i = 0; i < mobileData.length; i++) { 
+    drawMobileLine(mobileData[i].Value);  
+  }
 }

@@ -52,43 +52,6 @@ html, body{
     shape-rendering: crispEdges;
   }
 
-  .histogram {
-      position: absolute;
-      margin-left: 20px;
-      margin-top: 50px;
-      /*border: 1px solid black;*/
-  }
-
-  .histogram-title{
-    position: absolute;
-    margin-left: 890px;
-    margin-top: 20px;
-    font-weight: bold;
-  }
-
-  .cpm{
-    position: absolute;
-    margin-left: 910px;
-    margin-top: 470px;
-    font-weight: bold;
-  }
-
-  .static-text{
-    position: absolute;
-    margin-left: 1050px;
-    margin-top: 200px;
-    font-weight: bold;
-    color: rgba(0,0,200,0.9);
-  }
-
-  .mobile-text{
-    position: absolute;
-    margin-left: 1050px;
-    margin-top: 230px;
-    font-weight: bold;
-    color: rgba(0,200,0,0.9);
-  }
-
   .map{
       border: 1px solid black;
   }
@@ -129,6 +92,43 @@ html, body{
     width: 100%;
 }
 
+.histogram {
+  position: absolute;
+  margin-left: 20px;
+  margin-top: 50px;
+  /*border: 1px solid black;*/
+}
+
+.histogram-title{
+  position: absolute;
+  margin-left: 890px;
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+.cpm{
+  position: absolute;
+  margin-left: 910px;
+  margin-top: 470px;
+  font-weight: bold;
+}
+
+.static-text{
+  position: absolute;
+  margin-left: 1050px;
+  margin-top: 192px;
+  font-weight: bold;
+  color: rgba(0,0,200,0.9);
+}
+
+.mobile-text{
+  position: absolute;
+  margin-left: 1044px;
+  margin-top: 224px;
+  font-weight: bold;
+  color: rgba(0,200,0,0.9);
+}
+
 .accu-label{
   position: absolute;
   top: 600px;
@@ -149,4 +149,35 @@ html, body{
 
 .accu-checkbox:hover{
   cursor: pointer;
+}
+
+.show-values-checkboxes{
+  position: absolute;
+  width: 30px;
+  height: 90px;
+  top: 190px;
+  left: 1170px;
+  z-index: 5;
+}
+
+.mobile-values-checkbox{
+  margin-top: 10px;
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+}
+
+.static-values-checkbox{
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+}
+
+.show-values-text{
+  position: absolute;
+  top: 130px;
+  left: 1160px;
+  font-weight: normal;
+  font-size: 15px;
+  width: 40px;
 }
