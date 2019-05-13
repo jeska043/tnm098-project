@@ -6,8 +6,8 @@ var scaling = 0.6;
 imageWidth *= scaling;
 imageHeight *= scaling;
 
-var sensorRadius = 11;
-var nuclearPlantRadius = 11;
+var sensorRadius = 12;
+var nuclearPlantRadius = 12;
 
 // "x"-range
 var minLong = -120;
@@ -16,48 +16,47 @@ var maxLong = -119.711751;
 var minLat = 0;
 var maxLat = 0.238585;
 
-  // Timeslider
-  var date = "2020-04-06 00:00:00";
-  hoursToAdd = 2;
-  var formatTime = d3.timeFormat("%Y-%m-%d %H:%M:%S");
+// Timeslider
+stepMinutes = 60;
+var formatTime = d3.timeFormat("%Y-%m-%d %H:%M:%S");
 
-  var dataTime = d3.range(0, 5).map(function(d) {
-    return new Date(2020, 3, 6+d);
+var dataTime = d3.range(0, 5).map(function (d) {
+  return new Date(2020, 3, 6 + d);
+});
+
+var maxDate = d3.range(0, 5).map(function (d) {
+  return new Date(2020, 3, 10, 23);
+});
+
+var sliderTime = d3
+  .sliderBottom()
+  .min(d3.min(dataTime))
+  .max(d3.max(maxDate))
+  .step(stepMinutes * 60 * 1000)
+  .width(550)
+  .tickFormat('')
+  .tickValues('')
+  .displayValue(false)
+  .default(new Date(2020, 3, 6))
+  .on('onchange', val => {
+    var newDate = formatTime(val);
+    if (newDate !== currentDate) {
+      d3.select('p#value-time').text(newDate);
+      updateVisualization(newDate);
+    }
   });
 
-  var maxDate = d3.range(0, 5).map(function(d) {
-    return new Date(2020, 3, 10, 22 );
-  });
+var gTime = d3
+  .select('div#slider-time')
+  .append('svg')
+  .attr('width', 600)
+  .attr('height', 40)
+  .append('g')
+  .attr('transform', 'translate(30,7)');
 
-  var sliderTime = d3
-    .sliderBottom()
-    .min(d3.min(dataTime))
-    .max(d3.max(maxDate))
-    .step(2 * 60 * 60 * 1000)
-    .width(550)
-    .tickFormat('')
-    .tickValues('')
-    .displayValue(false)
-    .default(new Date(2020, 3, 6))
-    .on('onchange', val => {
-      var newDate = formatTime(val);
-      if(newDate !== currentDate){
-        d3.select('p#value-time').text(newDate);
-        updateVisualization(newDate);
-      }
-    });
+gTime.call(sliderTime);
 
-  var gTime = d3
-    .select('div#slider-time')
-    .append('svg')
-    .attr('width', 600)
-    .attr('height', 40)
-    .append('g')
-    .attr('transform', 'translate(30,7)');
-
-  gTime.call(sliderTime);
-
-  d3.select('p#value-time').text(formatTime(sliderTime.value()));
+d3.select('p#value-time').text(formatTime(sliderTime.value()));
 
 // Nuclear plant position
 var nuclearPlantLat = 0.162679;
@@ -118,6 +117,15 @@ console.log("Getting static sensor locations.");
 d3.csv("./data/StaticSensorLocations.csv").then(function(array){
   array.forEach(element => {
     staticSensorLocations[element["Sensor-id"]] = [parseFloat(element.Long), parseFloat(element.Lat)];
+    // Draw the black dots for the static sensors
+    var xPos = (element.Long-minLong)/(maxLong-minLong)*imageWidth;
+    var yPos = (1-(element.Lat-minLat)/(maxLat-minLat))*imageHeight;
+    svg.append("circle")
+      .attr("class", "static-sensor-dot")
+      .attr("cx", xPos)
+      .attr("cy", yPos)
+      .attr("r", 1)
+      .style("fill", "black");
   });
   console.log("Static sensor locations retrieved.")
 })
@@ -148,9 +156,7 @@ d3.csv("./data/StaticSensorLocations.csv").then(function(array){
         }
       }
     });
-    //console.log("minStatic: " + minStaticValue);
-    //console.log("maxStatic: " + maxStaticValue);
-    //console.log(staticSensorReadings["2020-04-08 13:40:15"]);
+
     console.log("Static sensor readings retrieved.");
     staticDataLoaded = true;
     checkLoadStatus();
@@ -188,9 +194,7 @@ d3.csv("./data/MobileSensorReadings.csv").then(function(array){
       }
     }
   });
-  //console.log("minMobile: " + minMobileValue);
-  //console.log("maxMobile: " + maxMobileValue);
-  //console.log(mobileSensorReadings["2020-04-10 23:59:45"]);
+
   console.log("Mobile sensor readings retrieved.");
   mobileDataLoaded = true;
   checkLoadStatus();
@@ -200,117 +204,40 @@ d3.csv("./data/MobileSensorReadings.csv").then(function(array){
   console.error(e);
 });
 
-
-/*
-function buttonOnClick(){
-  console.log(date);
-  var staticData = staticSensorReadings[date];
-  var mobileData = mobileSensorReadings[date];
-
-  d3.selectAll("circle").remove();
-
-  // Append nuclear plant
-  svg.append("circle")
-  .attr("cx", nuclearPlantX)
-  .attr("cy", nuclearPlantY)
-  .attr("r", nuclearPlantRadius)
-  .style("fill", "yellow")
-  .style("stroke", "black")
-  .style("fill-opacity", 1);
-  svg.append("circle")
-  .attr("cx", nuclearPlantX)
-  .attr("cy", nuclearPlantY)
-  .attr("r", 1)
-  .style("fill", "black");
-
-  for(i = 0; i < staticData.length; i++){
-    var reading = staticData[i];
-    var xPos = (reading.Long-minLong)/(maxLong-minLong)*imageWidth;
-    var yPos = (1-(reading.Lat-minLat)/(maxLat-minLat))*imageHeight;
-    svg.append("circle")
-    .attr("cx", xPos)
-    .attr("cy", yPos)
-    .attr("r", sensorRadius)
-    .style("fill", "red")
-    .style("fill-opacity", (reading.Value-minStaticLimit)/(maxStaticLimit-minStaticLimit));
-    svg.append("circle")
-    .attr("cx", xPos)
-    .attr("cy", yPos)
-    .attr("r", 1)
-    .style("fill", "black");
-  }
-
-  
-
-  for(i = 0; i < mobileData.length; i++){
-    var reading = mobileData[i];
-    var xPos = (reading.Long-minLong)/(maxLong-minLong)*imageWidth;
-    var yPos = (1-(reading.Lat-minLat)/(maxLat-minLat))*imageHeight;
-    svg.append("circle")
-    .attr("cx", xPos)
-    .attr("cy", yPos)
-    .attr("r", sensorRadius)
-    .style("fill", "red")
-    .style("fill-opacity", (reading.Value-minMobileLimit)/(maxMobileLimit-minMobileLimit));
-  }
-
-  var newDate = new Date(date);
-  newDate.setTime(newDate.getTime() + (hoursToAdd*60*60*1000));
-  if(newDate.getTime() <= 1586555985000){
-    date = formatTime(newDate);
-  }
-}
-*/
 var showingCurrentValues = true;
 var currentDate;
 
 function updateVisualization(date){
-  //console.log(date);
-  currentDate = date;
-
-  d3.selectAll("circle").remove();
-  
-    // Append nuclear plant
-    svg.append("circle")
-    .attr("cx", nuclearPlantX)
-    .attr("cy", nuclearPlantY)
-    .attr("r", nuclearPlantRadius)
-    .style("fill", "yellow")
-    .style("stroke", "black")
-    .style("fill-opacity", 1);
-    svg.append("circle")
-    .attr("cx", nuclearPlantX)
-    .attr("cy", nuclearPlantY)
-    .attr("r", 1)
-    .style("fill", "black");
+  //console.log("new date: " + date);
+  d3.selectAll(".current-sensor").remove();
 
   if(showingCurrentValues){
-    // Show values for the selected date
+    d3.selectAll(".accu-sensor").remove();
+    // Show values for the selected date only
     var staticData = staticSensorReadings[date];
     var mobileData = mobileSensorReadings[date];
   
+    // Current static data
     for(var i = 0; i < staticData.length; i++){
       var reading = staticData[i];
       var xPos = (reading.Long-minLong)/(maxLong-minLong)*imageWidth;
       var yPos = (1-(reading.Lat-minLat)/(maxLat-minLat))*imageHeight;
       svg.append("circle")
+      .attr("class", "current-sensor")
       .attr("cx", xPos)
       .attr("cy", yPos)
       .attr("r", sensorRadius)
       .style("fill", "red")
       .style("fill-opacity", (reading.Value-minStaticLimit)/(maxStaticLimit-minStaticLimit));
-      svg.append("circle")
-      .attr("cx", xPos)
-      .attr("cy", yPos)
-      .attr("r", 1)
-      .style("fill", "black");
     }
   
+    // Current mobile data
     for(var i = 0; i < mobileData.length; i++){
       var reading = mobileData[i];
       var xPos = (reading.Long-minLong)/(maxLong-minLong)*imageWidth;
       var yPos = (1-(reading.Lat-minLat)/(maxLat-minLat))*imageHeight;
       svg.append("circle")
+      .attr("class", "current-sensor")
       .attr("cx", xPos)
       .attr("cy", yPos)
       .attr("r", sensorRadius)
@@ -320,45 +247,35 @@ function updateVisualization(date){
   }
   else{
     // Show accumulated values up until the selected date
-    var opacityFactor = 0.01;
-    var dates = getDatesUpUntil(date);
-    console.log(dates.length);
-    //console.log(dates[2]);
-    for(var d = 0; d < dates.length; d++){
-      var staticData = staticSensorReadings[dates[d]];
-      var mobileData = mobileSensorReadings[dates[d]];
-    
-      for(var i = 0; i < staticData.length; i++){
-        var reading = staticData[i];
-        var xPos = (reading.Long-minLong)/(maxLong-minLong)*imageWidth;
-        var yPos = (1-(reading.Lat-minLat)/(maxLat-minLat))*imageHeight;
-        svg.append("circle")
-        .attr("cx", xPos)
-        .attr("cy", yPos)
-        .attr("r", sensorRadius)
-        .style("fill", "red")
-        .style("fill-opacity", opacityFactor*(reading.Value-minStaticLimit)/(maxStaticLimit-minStaticLimit));
-        svg.append("circle")
-        .attr("cx", xPos)
-        .attr("cy", yPos)
-        .attr("r", 1)
-        .style("fill", "black");
+    var datesToDraw = getDatesUpUntil(date);
+    var selectedDate = new Date(date);
+
+    // Go through all the currently drawn circles.
+    // If a circle's date is before (or equal to) the newly selected date, we keep that circle, and we also don't need to draw any new circles for that date.
+    // If a circle's date is after the newly selected date, we remove that circle.
+    var nodes = d3.selectAll(".accu-sensor");
+    var currentCircles = nodes._groups[0];
+
+    for(var i = 0; i < currentCircles.length; i++){
+      var circle = currentCircles[i];
+      var circleDate = new Date(circle.dataset.value);
+      if(circleDate.getTime() <= selectedDate.getTime()){
+        // Remove date from the dates to be drawn
+        var index = datesToDraw.indexOf(circle.dataset.value);
+        if(index !== -1){
+          datesToDraw.splice(index, 1);
+        }
       }
-    
-      for(var i = 0; i < mobileData.length; i++){
-        var reading = mobileData[i];
-        var xPos = (reading.Long-minLong)/(maxLong-minLong)*imageWidth;
-        var yPos = (1-(reading.Lat-minLat)/(maxLat-minLat))*imageHeight;
-        svg.append("circle")
-        .attr("cx", xPos)
-        .attr("cy", yPos)
-        .attr("r", sensorRadius)
-        .style("fill", "red")
-        .style("fill-opacity", opacityFactor*(reading.Value-minMobileLimit)/(maxMobileLimit-minMobileLimit));
+      else{
+        circle.remove();
       }
     }
+    // Draw circles for the filtered array
+    for(var i = 0; i < datesToDraw.length; i++){
+      drawAccuCircles(datesToDraw[i]);
+    }
   }
-  
+  currentDate = date;
 }
 
 function checkLoadStatus(){
@@ -370,11 +287,7 @@ function checkLoadStatus(){
   }
 }
 
-//var display = {type:"current", date:""};
-
 function showCurrentValues(){
-  console.log("c");
-
   if(!showingCurrentValues){
     showingCurrentValues = true;
     updateVisualization(currentDate);
@@ -382,8 +295,6 @@ function showCurrentValues(){
 }
 
 function showAccumulatedValues(){
-  console.log("a");
-
   if(showingCurrentValues){
     showingCurrentValues = false;
     updateVisualization(currentDate);
@@ -395,13 +306,50 @@ function getDatesUpUntil(date){
   var dates = [];
   var i = 0;
   for(var key in mobileSensorReadings){
-    if(i % 100 == 0){
+    if(i % 720 == 0){
       var keyDate = new Date(key);
-      if(keyDate.getTime() <= selectedDate.getTime()){
+      if(keyDate.getTime() < selectedDate.getTime()){
         dates.push(key);
       }
     }
     i++;
   }
+  dates.push(date);
   return dates;
+}
+
+function drawAccuCircles(date){
+  var opacityFactor = 0.03;
+  var staticData = staticSensorReadings[date];
+  var mobileData = mobileSensorReadings[date];
+
+  // Draw static sensors
+  for (var i = 0; i < staticData.length; i++) {
+    var reading = staticData[i];
+    var xPos = (reading.Long - minLong) / (maxLong - minLong) * imageWidth;
+    var yPos = (1 - (reading.Lat - minLat) / (maxLat - minLat)) * imageHeight;
+    svg.append("circle")
+      .attr("class", "accu-sensor")
+      .attr("data-value", date)
+      .attr("cx", xPos)
+      .attr("cy", yPos)
+      .attr("r", sensorRadius)
+      .style("fill", "red")
+      .style("fill-opacity", opacityFactor * (reading.Value - minStaticLimit) / (maxStaticLimit - minStaticLimit));
+  }
+
+  // Draw mobile sensors
+  for (var i = 0; i < mobileData.length; i++) {
+    var reading = mobileData[i];
+    var xPos = (reading.Long - minLong) / (maxLong - minLong) * imageWidth;
+    var yPos = (1 - (reading.Lat - minLat) / (maxLat - minLat)) * imageHeight;
+    svg.append("circle")
+      .attr("class", "accu-sensor")
+      .attr("data-value", date)
+      .attr("cx", xPos)
+      .attr("cy", yPos)
+      .attr("r", sensorRadius)
+      .style("fill", "red")
+      .style("fill-opacity", opacityFactor * (reading.Value - minMobileLimit) / (maxMobileLimit - minMobileLimit));
+  }
 }
