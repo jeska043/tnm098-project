@@ -261,9 +261,8 @@ function updateVisualization(date){
       var circleDate = new Date(circle.dataset.value);
       if(circleDate.getTime() <= selectedDate.getTime()){
         // Remove date from the dates to be drawn
-        var index = datesToDraw.indexOf(circle.dataset.value);
-        if(index !== -1){
-          datesToDraw.splice(index, 1);
+        if(datesToDraw.includes(circle.dataset.value)){
+          datesToDraw.splice(datesToDraw.indexOf(circle.dataset.value), 1);
         }
       }
       else{
