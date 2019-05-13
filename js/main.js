@@ -6,7 +6,10 @@ var scaling = 0.6;
 imageWidth *= scaling;
 imageHeight *= scaling;
 
-var sensorRadius = 12;
+// Circle sizes
+var currentSensorRadius = 35;
+var accuSensorRadius = 12;
+
 var nuclearPlantRadius = 12;
 
 // "x"-range
@@ -17,7 +20,7 @@ var minLat = 0;
 var maxLat = 0.238585;
 
 // Timeslider
-stepMinutes = 60;
+var stepMinutes = 60;
 var formatTime = d3.timeFormat("%Y-%m-%d %H:%M:%S");
 
 var dataTime = d3.range(0, 5).map(function (d) {
@@ -78,6 +81,23 @@ var svg = d3.select("#content")
 .attr("width", imageWidth)
 .attr("height", imageHeight)
 .attr("class", "map");
+
+// Define gradient for circles
+var defs = svg.append("defs");
+
+var gradient = defs.append("radialGradient")
+.attr("id", "myGradient")
+.attr("cx", "50%")
+.attr("cy", "50%")
+.attr("r", "50%")
+
+gradient.append("stop")
+.attr("offset", "10%")
+.attr("style", "stop-color:rgb(255,0,0);stop-opacity:1");
+
+gradient.append("stop")
+.attr("offset", "90%")
+.attr("style", "stop-color:rgb(255,255,255);stop-opacity:0");
 
 // Append background image
 svg.append("image")
@@ -226,8 +246,8 @@ function updateVisualization(date){
       .attr("class", "current-sensor")
       .attr("cx", xPos)
       .attr("cy", yPos)
-      .attr("r", sensorRadius)
-      .style("fill", "red")
+      .attr("r", currentSensorRadius)
+      .style("fill", "url(#myGradient)")
       .style("fill-opacity", (reading.Value-minStaticLimit)/(maxStaticLimit-minStaticLimit));
     }
   
@@ -240,8 +260,8 @@ function updateVisualization(date){
       .attr("class", "current-sensor")
       .attr("cx", xPos)
       .attr("cy", yPos)
-      .attr("r", sensorRadius)
-      .style("fill", "red")
+      .attr("r", currentSensorRadius)
+      .style("fill", "url(#myGradient)")
       .style("fill-opacity", (reading.Value-minMobileLimit)/(maxMobileLimit-minMobileLimit));
     }
   }
@@ -318,7 +338,7 @@ function getDatesUpUntil(date){
 }
 
 function drawAccuCircles(date){
-  var opacityFactor = 0.03;
+  var opacityFactor = 0.025;
   var staticData = staticSensorReadings[date];
   var mobileData = mobileSensorReadings[date];
 
@@ -332,7 +352,7 @@ function drawAccuCircles(date){
       .attr("data-value", date)
       .attr("cx", xPos)
       .attr("cy", yPos)
-      .attr("r", sensorRadius)
+      .attr("r", accuSensorRadius)
       .style("fill", "red")
       .style("fill-opacity", opacityFactor * (reading.Value - minStaticLimit) / (maxStaticLimit - minStaticLimit));
   }
@@ -347,7 +367,7 @@ function drawAccuCircles(date){
       .attr("data-value", date)
       .attr("cx", xPos)
       .attr("cy", yPos)
-      .attr("r", sensorRadius)
+      .attr("r", accuSensorRadius)
       .style("fill", "red")
       .style("fill-opacity", opacityFactor * (reading.Value - minMobileLimit) / (maxMobileLimit - minMobileLimit));
   }
