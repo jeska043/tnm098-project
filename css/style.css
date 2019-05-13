@@ -54,8 +54,39 @@ html, body{
 
   .histogram {
       position: absolute;
-      margin-left: 10px;
-      border: 1px solid black;
+      margin-left: 20px;
+      margin-top: 50px;
+      /*border: 1px solid black;*/
+  }
+
+  .histogram-title{
+    position: absolute;
+    margin-left: 890px;
+    margin-top: 20px;
+    font-weight: bold;
+  }
+
+  .cpm{
+    position: absolute;
+    margin-left: 910px;
+    margin-top: 470px;
+    font-weight: bold;
+  }
+
+  .static-text{
+    position: absolute;
+    margin-left: 1050px;
+    margin-top: 200px;
+    font-weight: bold;
+    color: rgba(0,0,200,0.9);
+  }
+
+  .mobile-text{
+    position: absolute;
+    margin-left: 1050px;
+    margin-top: 230px;
+    font-weight: bold;
+    color: rgba(0,200,0,0.9);
   }
 
   .map{
@@ -64,14 +95,11 @@ html, body{
 
 #timeslider {
     position: absolute;
-    top: 85%;
-    height: 5%;
-    width: 800px;
+    top: 500px;
+    width: 840px;
     margin-left: auto;
     margin-right: auto;
 }
-
-
 
 #timebox {
     width: 50%;
@@ -103,9 +131,10 @@ html, body{
 
 .accu-label{
   position: absolute;
-  top: 500px;
-  left: 20px;
-  font-weight: bold;
+  top: 600px;
+  left: 245px;
+  font-weight: normal;
+  font-size: 15px;
 }
 
 .accu-label:hover{
