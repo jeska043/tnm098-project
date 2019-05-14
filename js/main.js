@@ -320,6 +320,8 @@ function updateVisualization(date){
       var avgMobileSensors = avgMobileReadings[date];
 
       // Current avg static data
+      var staticLines = 0;
+      var staticLineVal = 0;
       for (var sensorId in avgStaticSensors) {
         var reading = avgStaticSensors[sensorId];
         var xPos = (reading.Long - minLong) / (maxLong - minLong) * imageWidth;
@@ -331,12 +333,24 @@ function updateVisualization(date){
           .attr("r", currentSensorRadius)
           .style("fill", "url(#myGradient)")
           .style("fill-opacity", (reading.avgValue - minStaticLimit) / (maxStaticLimit - minStaticLimit));
-        if (showStaticValues) {
+        /*if (showStaticValues) {
+          drawStaticLine(reading.avgValue);
+        }*/
+        if(staticLineMode == "all"){
           drawStaticLine(reading.avgValue);
         }
+        else if(staticLineMode == "average"){
+          staticLineVal += reading.avgValue;
+          staticLines++;
+        }
+      }
+      if(staticLines > 0){
+        drawStaticLine(staticLineVal/staticLines);
       }
 
       // Current avg mobile data
+      var mobileLines = 0;
+      var mobileLineVal = 0;
       for (var sensorId in avgMobileSensors) {
         var reading = avgMobileSensors[sensorId];
         var xPos = (reading.avgLong - minLong) / (maxLong - minLong) * imageWidth;
@@ -348,9 +362,19 @@ function updateVisualization(date){
           .attr("r", currentSensorRadius)
           .style("fill", "url(#myGradient)")
           .style("fill-opacity", (reading.avgValue - minMobileLimit) / (maxMobileLimit - minMobileLimit));
-        if (showMobileValues) {
+        /*if (showMobileValues) {
+          drawMobileLine(reading.avgValue);
+        }*/
+        if(mobileLineMode == "all"){
           drawMobileLine(reading.avgValue);
         }
+        else if(mobileLineMode == "average"){
+          mobileLineVal += reading.avgValue;
+          mobileLines++;
+        }
+      }
+      if(mobileLines > 0){
+        drawMobileLine(mobileLineVal/mobileLines);
       }
     }
     else{
@@ -358,6 +382,8 @@ function updateVisualization(date){
       var mobileData = mobileSensorReadings[date];
 
       // Current static data
+      var staticLines = 0;
+      var staticLineVal = 0;
       for (var i = 0; i < staticData.length; i++) {
         var reading = staticData[i];
         var xPos = (reading.Long - minLong) / (maxLong - minLong) * imageWidth;
@@ -369,12 +395,24 @@ function updateVisualization(date){
           .attr("r", currentSensorRadius)
           .style("fill", "url(#myGradient)")
           .style("fill-opacity", (reading.Value - minStaticLimit) / (maxStaticLimit - minStaticLimit));
-        if (showStaticValues) {
+        /*if (showStaticValues) {
+          drawStaticLine(reading.Value);
+        }*/
+        if(staticLineMode == "all"){
           drawStaticLine(reading.Value);
         }
+        else if(staticLineMode == "average"){
+          staticLineVal += reading.Value;
+          staticLines++;
+        }
+      }
+      if(staticLines > 0){
+        drawStaticLine(staticLineVal/staticLines);
       }
 
       // Current mobile data
+      var mobileLines = 0;
+      var mobileLineVal = 0;
       for (var i = 0; i < mobileData.length; i++) {
         var reading = mobileData[i];
         var xPos = (reading.Long - minLong) / (maxLong - minLong) * imageWidth;
@@ -386,9 +424,19 @@ function updateVisualization(date){
           .attr("r", currentSensorRadius)
           .style("fill", "url(#myGradient)")
           .style("fill-opacity", (reading.Value - minMobileLimit) / (maxMobileLimit - minMobileLimit));
-        if (showMobileValues) {
+        /*if (showMobileValues) {
+          drawMobileLine(reading.Value);
+        }*/
+        if(mobileLineMode == "all"){
           drawMobileLine(reading.Value);
         }
+        else if(mobileLineMode == "average"){
+          mobileLineVal += reading.Value;
+          mobileLines++;
+        }
+      }
+      if(mobileLines > 0){
+        drawMobileLine(mobileLineVal/mobileLines);
       }
     }
   }
@@ -421,10 +469,16 @@ function updateVisualization(date){
       drawAccuCircles(datesToDraw[i]);
     }
     // Histogram lines
-    if(showStaticValues){
+    /*if(showStaticValues){
       drawStaticLines(date);
     }
     if(showMobileValues){
+      drawMobileLines(date);
+    }*/
+    if(staticLineMode !== "none"){
+      drawStaticLines(date);
+    }
+    if(mobileLineMode !== "none"){
       drawMobileLines(date);
     }
   }
@@ -543,7 +597,7 @@ function toggleAccumulate(checkbox){
   updateVisualization(currentDate);
 }
 
-var showStaticValues = true;
+/*var showStaticValues = true;
 function toggleShowStaticValues(checkbox){
   showStaticValues = checkbox.checked;
   updateVisualization(currentDate);
@@ -553,7 +607,7 @@ var showMobileValues = true;
 function toggleShowMobileValues(checkbox){
   showMobileValues = checkbox.checked;
   updateVisualization(currentDate);
-}
+}*/
 
 function drawStaticLine(value){
   if(value > 0){
@@ -580,32 +634,66 @@ function drawMobileLine(value){
 }
 
 function drawStaticLines(date){
+  var staticLines = 0;
+  var staticLineVal = 0;
   if(averaging){
     var avgStaticSensors = avgStaticReadings[date];
     for (var sensorId in avgStaticSensors) {
-      drawStaticLine(avgStaticSensors[sensorId].avgValue);
+      if(staticLineMode == "all"){
+        drawStaticLine(avgStaticSensors[sensorId].avgValue);
+      }
+      else if(staticLineMode == "average"){
+        staticLineVal += avgStaticSensors[sensorId].avgValue;
+        staticLines++;
+      }
     }
   }
   else{
     var staticData = staticSensorReadings[date];
     for (var i = 0; i < staticData.length; i++) {
-      drawStaticLine(staticData[i].Value);
+      if(staticLineMode == "all"){
+        drawStaticLine(staticData[i].Value);
+      }
+      else if(staticLineMode == "average"){
+        staticLineVal += staticData[i].Value;
+        staticLines++;
+      }
     }
+  }
+  if(staticLines > 0){
+    drawStaticLine(staticLineVal/staticLines);
   }
 }
 
 function drawMobileLines(date){
+  var mobileLines = 0;
+  var mobileLineVal = 0;
   if(averaging){
     var avgMobileSensors = avgMobileReadings[date];
     for (var sensorId in avgMobileSensors) {
-      drawMobileLine(avgMobileSensors[sensorId].avgValue);
+      if(mobileLineMode == "all"){
+        drawMobileLine(avgMobileSensors[sensorId].avgValue);
+      }
+      else if(mobileLineMode == "average"){
+        mobileLineVal += avgMobileSensors[sensorId].avgValue;
+        mobileLines++;
+      }
     }
   }
   else{
     var mobileData = mobileSensorReadings[date];
     for (var i = 0; i < mobileData.length; i++) {
-      drawMobileLine(mobileData[i].Value);
+      if(mobileLineMode == "all"){
+        drawMobileLine(mobileData[i].Value);
+      }
+      else if(mobileLineMode == "average"){
+        mobileLineVal += mobileData[i].Value;
+        mobileLines++;
+      }
     }
+  }
+  if(mobileLines > 0){
+    drawMobileLine(mobileLineVal/mobileLines);
   }
 }
 
@@ -619,5 +707,17 @@ function onModeChange(select){
   var val = select.options[select.selectedIndex].value;
   averaging = (val == "average");
   d3.selectAll(".accu-sensor").remove();
+  updateVisualization(currentDate);
+}
+
+var staticLineMode = "all";
+function onStaticLinesChange(select){
+  staticLineMode = select.options[select.selectedIndex].value;
+  updateVisualization(currentDate);
+}
+
+var mobileLineMode = "all";
+function onMobileLinesChange(select){
+  mobileLineMode = select.options[select.selectedIndex].value;
   updateVisualization(currentDate);
 }

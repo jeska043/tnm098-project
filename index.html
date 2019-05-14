@@ -30,17 +30,28 @@
     <p class="static-sensor-text">Static sensors</p>
     <p class="show-values-text">Values</p>
     <p class="show-dist-text">Distribution</p>
-    <div class="show-values-checkboxes">
+    <!----<div class="show-values-checkboxes">
       <input class="static-values-checkbox" type="checkbox" onchange="toggleShowStaticValues(this)" checked>
       <input class="mobile-values-checkbox" type="checkbox" onchange="toggleShowMobileValues(this)" checked>
-    </div>
+    </div>-->
     <div class="show-dist-checkboxes">
       <input class="static-dist-checkbox" type="checkbox" onchange="toggleShowStaticDist(this)" checked>
       <input class="mobile-dist-checkbox" type="checkbox" onchange="toggleShowMobileDist(this)" checked>
     </div>
+    <select class="static-lines-select" onchange="onStaticLinesChange(this)">
+      <option value="none">None</option>
+      <option value="average">Average</option>
+      <option value="all" selected>All sensors</option>
+    </select>
+    <select class="mobile-lines-select" onchange="onMobileLinesChange(this)">
+      <option value="none">None</option>
+      <option value="average">Average</option>
+      <option value="all" selected>All sensors</option>
+    </select>
+
     <div class="mode-section">
       <label for="mode-select">Mode</label>
-      <select name="mode-select" class="mode-select" id="mode-select" onchange="onModeChange(this)">
+      <select name="mode-select" class="mode-select" onchange="onModeChange(this)">
         <option value="average" selected>Average last hour</option>
         <option value="current">Current values</option>
       </select>

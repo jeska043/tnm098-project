@@ -176,7 +176,7 @@ html, body{
 .show-values-text{
   position: absolute;
   top: 505px;
-  left: 1000px;
+  left: 1020px;
   font-weight: normal;
   font-size: 15px;
   width: 40px;
@@ -230,4 +230,18 @@ html, body{
   display: inline-block;
   cursor: pointer;
   margin-left: 8px;
+}
+
+.static-lines-select{
+  position: absolute;
+  left: 1000px;
+  top: 546px;
+  cursor: pointer;
+}
+
+.mobile-lines-select{
+  position: absolute;
+  left: 1000px;
+  top: 577px;
+  cursor: pointer;
 }
