@@ -151,28 +151,6 @@ html, body{
   cursor: pointer;
 }
 
-.show-values-checkboxes{
-  position: absolute;
-  width: 30px;
-  height: 90px;
-  top: 546px;
-  left: 1010px;
-  z-index: 5;
-}
-
-.mobile-values-checkbox{
-  margin-top: 10px;
-  cursor: pointer;
-  width: 16px;
-  height: 16px;
-}
-
-.static-values-checkbox{
-  cursor: pointer;
-  width: 16px;
-  height: 16px;
-}
-
 .show-values-text{
   position: absolute;
   top: 505px;
