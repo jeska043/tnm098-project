@@ -379,13 +379,13 @@ function toggleAccumulate(checkbox){
   updateVisualization(currentDate);
 }
 
-var showStaticValues = false;
+var showStaticValues = true;
 function toggleShowStaticValues(checkbox){
   showStaticValues = checkbox.checked;
   updateVisualization(currentDate);
 }
 
-var showMobileValues = false;
+var showMobileValues = true;
 function toggleShowMobileValues(checkbox){
   showMobileValues = checkbox.checked;
   updateVisualization(currentDate);

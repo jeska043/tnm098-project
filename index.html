@@ -29,9 +29,14 @@
     <p class="mobile-text">Mobile sensors</p>
     <p class="static-text">Static sensors</p>
     <p class="show-values-text">Show values</p>
+    <p class="show-dist-text">Show distribution</p>
     <div class="show-values-checkboxes">
-      <input class="static-values-checkbox" type="checkbox" onchange="toggleShowStaticValues(this)">
-      <input class="mobile-values-checkbox" type="checkbox" onchange="toggleShowMobileValues(this)">
+      <input class="static-values-checkbox" type="checkbox" onchange="toggleShowStaticValues(this)" checked=true>
+      <input class="mobile-values-checkbox" type="checkbox" onchange="toggleShowMobileValues(this)" checked=true>
+    </div>
+    <div class="show-dist-checkboxes">
+      <input class="static-dist-checkbox" type="checkbox" onchange="toggleShowStaticDist(this)" checked=true>
+      <input class="mobile-dist-checkbox" type="checkbox" onchange="toggleShowMobileDist(this)" checked=true>
     </div>
   </div>
  

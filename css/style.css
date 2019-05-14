@@ -115,7 +115,7 @@ html, body{
 
 .static-text{
   position: absolute;
-  margin-left: 1050px;
+  margin-left: 1030px;
   margin-top: 192px;
   font-weight: bold;
   color: rgba(0,0,200,0.9);
@@ -123,7 +123,7 @@ html, body{
 
 .mobile-text{
   position: absolute;
-  margin-left: 1044px;
+  margin-left: 1024px;
   margin-top: 224px;
   font-weight: bold;
   color: rgba(0,200,0,0.9);
@@ -156,7 +156,7 @@ html, body{
   width: 30px;
   height: 90px;
   top: 190px;
-  left: 1170px;
+  left: 1228px;
   z-index: 5;
 }
 
@@ -176,8 +176,41 @@ html, body{
 .show-values-text{
   position: absolute;
   top: 130px;
-  left: 1160px;
+  left: 1220px;
   font-weight: normal;
   font-size: 15px;
   width: 40px;
+  text-align: center;
+}
+
+.show-dist-checkboxes{
+  position: absolute;
+  width: 30px;
+  height: 90px;
+  top: 190px;
+  left: 1160px;
+  z-index: 5;
+}
+
+.mobile-dist-checkbox{
+  margin-top: 10px;
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+}
+
+.static-dist-checkbox{
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+}
+
+.show-dist-text{
+  position: absolute;
+  top: 130px;
+  left: 1140px;
+  font-weight: normal;
+  font-size: 15px;
+  width: 50px;
+  text-align: center;
 }
