@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <label class="accu-label">Accumulate values<input class="accu-checkbox" type="checkbox" onchange="toggleAccumulate(this)"></label>
+    <label class="accu-label">Accumulated values<input class="accu-checkbox" type="checkbox" onchange="toggleAccumulate(this)"></label>
 
     <p class="histogram-title">Histogram</p>
     <p class="cpm">cpm</p>
@@ -31,12 +31,19 @@
     <p class="show-values-text">Values</p>
     <p class="show-dist-text">Distribution</p>
     <div class="show-values-checkboxes">
-      <input class="static-values-checkbox" type="checkbox" onchange="toggleShowStaticValues(this)" checked=true>
-      <input class="mobile-values-checkbox" type="checkbox" onchange="toggleShowMobileValues(this)" checked=true>
+      <input class="static-values-checkbox" type="checkbox" onchange="toggleShowStaticValues(this)" checked>
+      <input class="mobile-values-checkbox" type="checkbox" onchange="toggleShowMobileValues(this)" checked>
     </div>
     <div class="show-dist-checkboxes">
-      <input class="static-dist-checkbox" type="checkbox" onchange="toggleShowStaticDist(this)" checked=true>
-      <input class="mobile-dist-checkbox" type="checkbox" onchange="toggleShowMobileDist(this)" checked=true>
+      <input class="static-dist-checkbox" type="checkbox" onchange="toggleShowStaticDist(this)" checked>
+      <input class="mobile-dist-checkbox" type="checkbox" onchange="toggleShowMobileDist(this)" checked>
+    </div>
+    <div class="mode-section">
+      <label for="mode-select">Mode</label>
+      <select name="mode-select" class="mode-select" id="mode-select" onchange="onModeChange(this)">
+        <option value="average" selected>Average last hour</option>
+        <option value="current">Current values</option>
+      </select>
     </div>
   </div>
  

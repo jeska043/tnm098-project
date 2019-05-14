@@ -163,6 +163,24 @@ d3.csv("./data/StaticSensorLocations.csv").then(function(array){
         var closestHour = closestHourAfter(element.Timestamp);
         // Only save the reading if it's within the specified range
         if(value >= minStaticLimit && value <= maxStaticLimit){
+          var d = new Date(element.Timestamp);
+          var hourMs = 1000*60*60;
+          // Save only readings for exact hours, to match timeline
+          if(d.getTime() % hourMs == 0){
+            var reading = {
+              "Long": staticSensorLocations[element["Sensor-id"]][0],
+              "Lat": staticSensorLocations[element["Sensor-id"]][1],
+              "Value": value
+            };
+            // Save the reading
+            if(staticSensorReadings[element.Timestamp]){
+              staticSensorReadings[element.Timestamp].push(reading);
+            }
+            else{
+              staticSensorReadings[element.Timestamp] = [reading];
+            }
+          }
+          // For average
           if(avgStaticReadings[closestHour]){
             if(avgStaticReadings[closestHour][sensorId]){
               avgStaticReadings[closestHour][sensorId].avgValue += value;
@@ -198,7 +216,6 @@ d3.csv("./data/StaticSensorLocations.csv").then(function(array){
         avgStaticReadings[hour][sensorId].avgValue /= avgStaticReadings[hour][sensorId].count;
       }
     }
-    //console.log(JSON.stringify(avgStaticReadings));
     console.log("Static sensor readings retrieved.");
     staticDataLoaded = true;
     checkLoadStatus();
@@ -218,6 +235,24 @@ d3.csv("./data/MobileSensorReadings.csv").then(function(array){
     var value = parseFloat(element.Value);
     // Only save the reading if it's within the specified range
     if(value >= minMobileLimit && value <= maxMobileLimit){
+      var d = new Date(element.Timestamp);
+      var hourMs = 1000*60*60;
+      // Save only readings for exact hours, to match timeline
+      if(d.getTime() % hourMs == 0){
+        var reading = {
+          "Long": parseFloat(element.Long),
+          "Lat": parseFloat(element.Lat),
+          "Value": value
+        };
+        // Save the reading
+        if(mobileSensorReadings[element.Timestamp]){
+          mobileSensorReadings[element.Timestamp].push(reading);
+        }
+        else{
+          mobileSensorReadings[element.Timestamp] = [reading];
+        }
+      }
+      // For average
       var closestHour = closestHourAfter(element.Timestamp);
       var sensorId = element['Sensor-id'];
       // Save value for histogram
@@ -267,6 +302,7 @@ d3.csv("./data/MobileSensorReadings.csv").then(function(array){
 });
 
 var accumulating = false;
+var averaging = true;
 var currentDate;
 var histogram;
 
@@ -279,41 +315,80 @@ function updateVisualization(date){
   if(!accumulating){
     // Show values for the selected date only
     d3.selectAll(".accu-sensor").remove();
-    var avgStaticSensors = avgStaticReadings[date];
-    var avgMobileSensors = avgMobileReadings[date];
-  
-    // Current static data
-    for(var sensorId in avgStaticSensors){
-      var reading = avgStaticSensors[sensorId];
-      var xPos = (reading.Long-minLong)/(maxLong-minLong)*imageWidth;
-      var yPos = (1-(reading.Lat-minLat)/(maxLat-minLat))*imageHeight;
-      svg.append("circle")
-      .attr("class", "current-sensor")
-      .attr("cx", xPos)
-      .attr("cy", yPos)
-      .attr("r", currentSensorRadius)
-      .style("fill", "url(#myGradient)")
-      .style("fill-opacity", (reading.avgValue-minStaticLimit)/(maxStaticLimit-minStaticLimit));
-      if(showStaticValues){
-        drawStaticLine(reading.avgValue);
-      }  
+    if(averaging){
+      var avgStaticSensors = avgStaticReadings[date];
+      var avgMobileSensors = avgMobileReadings[date];
+
+      // Current avg static data
+      for (var sensorId in avgStaticSensors) {
+        var reading = avgStaticSensors[sensorId];
+        var xPos = (reading.Long - minLong) / (maxLong - minLong) * imageWidth;
+        var yPos = (1 - (reading.Lat - minLat) / (maxLat - minLat)) * imageHeight;
+        svg.append("circle")
+          .attr("class", "current-sensor")
+          .attr("cx", xPos)
+          .attr("cy", yPos)
+          .attr("r", currentSensorRadius)
+          .style("fill", "url(#myGradient)")
+          .style("fill-opacity", (reading.avgValue - minStaticLimit) / (maxStaticLimit - minStaticLimit));
+        if (showStaticValues) {
+          drawStaticLine(reading.avgValue);
+        }
+      }
+
+      // Current avg mobile data
+      for (var sensorId in avgMobileSensors) {
+        var reading = avgMobileSensors[sensorId];
+        var xPos = (reading.avgLong - minLong) / (maxLong - minLong) * imageWidth;
+        var yPos = (1 - (reading.avgLat - minLat) / (maxLat - minLat)) * imageHeight;
+        svg.append("circle")
+          .attr("class", "current-sensor")
+          .attr("cx", xPos)
+          .attr("cy", yPos)
+          .attr("r", currentSensorRadius)
+          .style("fill", "url(#myGradient)")
+          .style("fill-opacity", (reading.avgValue - minMobileLimit) / (maxMobileLimit - minMobileLimit));
+        if (showMobileValues) {
+          drawMobileLine(reading.avgValue);
+        }
+      }
     }
-  
-    // Current mobile data
-    for(var sensorId in avgMobileSensors){
-      var reading = avgMobileSensors[sensorId];
-      //console.log(reading);
-      var xPos = (reading.avgLong-minLong)/(maxLong-minLong)*imageWidth;
-      var yPos = (1-(reading.avgLat-minLat)/(maxLat-minLat))*imageHeight;
-      svg.append("circle")
-      .attr("class", "current-sensor")
-      .attr("cx", xPos)
-      .attr("cy", yPos)
-      .attr("r", currentSensorRadius)
-      .style("fill", "url(#myGradient)")
-      .style("fill-opacity", (reading.avgValue-minMobileLimit)/(maxMobileLimit-minMobileLimit));
-      if(showMobileValues){
-        drawMobileLine(reading.avgValue);
+    else{
+      var staticData = staticSensorReadings[date];
+      var mobileData = mobileSensorReadings[date];
+
+      // Current static data
+      for (var i = 0; i < staticData.length; i++) {
+        var reading = staticData[i];
+        var xPos = (reading.Long - minLong) / (maxLong - minLong) * imageWidth;
+        var yPos = (1 - (reading.Lat - minLat) / (maxLat - minLat)) * imageHeight;
+        svg.append("circle")
+          .attr("class", "current-sensor")
+          .attr("cx", xPos)
+          .attr("cy", yPos)
+          .attr("r", currentSensorRadius)
+          .style("fill", "url(#myGradient)")
+          .style("fill-opacity", (reading.Value - minStaticLimit) / (maxStaticLimit - minStaticLimit));
+        if (showStaticValues) {
+          drawStaticLine(reading.Value);
+        }
+      }
+
+      // Current mobile data
+      for (var i = 0; i < mobileData.length; i++) {
+        var reading = mobileData[i];
+        var xPos = (reading.Long - minLong) / (maxLong - minLong) * imageWidth;
+        var yPos = (1 - (reading.Lat - minLat) / (maxLat - minLat)) * imageHeight;
+        svg.append("circle")
+          .attr("class", "current-sensor")
+          .attr("cx", xPos)
+          .attr("cy", yPos)
+          .attr("r", currentSensorRadius)
+          .style("fill", "url(#myGradient)")
+          .style("fill-opacity", (reading.Value - minMobileLimit) / (maxMobileLimit - minMobileLimit));
+        if (showMobileValues) {
+          drawMobileLine(reading.Value);
+        }
       }
     }
   }
@@ -394,39 +469,72 @@ function getDatesUpUntil(date){
 
 function drawAccuCircles(date){
   var opacityFactor = 0.025;
-  //var staticData = staticSensorReadings[date];
-  //var mobileData = mobileSensorReadings[date];
-  var avgStaticSensors = avgStaticReadings[date];
-  var avgMobileSensors = avgMobileReadings[date];
+  if(averaging){
+    var avgStaticSensors = avgStaticReadings[date];
+    var avgMobileSensors = avgMobileReadings[date];
 
-  // Draw static sensors
-  for(var sensorId in avgStaticSensors) {
-    var reading = avgStaticSensors[sensorId];
-    var xPos = (reading.Long - minLong) / (maxLong - minLong) * imageWidth;
-    var yPos = (1 - (reading.Lat - minLat) / (maxLat - minLat)) * imageHeight;
-    svg.append("circle")
-      .attr("class", "accu-sensor")
-      .attr("data-value", date)
-      .attr("cx", xPos)
-      .attr("cy", yPos)
-      .attr("r", accuSensorRadius)
-      .style("fill", "red")
-      .style("fill-opacity", opacityFactor * (reading.avgValue - minStaticLimit) / (maxStaticLimit - minStaticLimit)); 
+    // Draw avg static sensors
+    for (var sensorId in avgStaticSensors) {
+      var reading = avgStaticSensors[sensorId];
+      var xPos = (reading.Long - minLong) / (maxLong - minLong) * imageWidth;
+      var yPos = (1 - (reading.Lat - minLat) / (maxLat - minLat)) * imageHeight;
+      svg.append("circle")
+        .attr("class", "accu-sensor")
+        .attr("data-value", date)
+        .attr("cx", xPos)
+        .attr("cy", yPos)
+        .attr("r", accuSensorRadius)
+        .style("fill", "red")
+        .style("fill-opacity", opacityFactor * (reading.avgValue - minStaticLimit) / (maxStaticLimit - minStaticLimit));
+    }
+
+    // Draw avg mobile sensors
+    for (var sensorId in avgMobileSensors) {
+      var reading = avgMobileSensors[sensorId];
+      var xPos = (reading.avgLong - minLong) / (maxLong - minLong) * imageWidth;
+      var yPos = (1 - (reading.avgLat - minLat) / (maxLat - minLat)) * imageHeight;
+      svg.append("circle")
+        .attr("class", "accu-sensor")
+        .attr("data-value", date)
+        .attr("cx", xPos)
+        .attr("cy", yPos)
+        .attr("r", accuSensorRadius)
+        .style("fill", "red")
+        .style("fill-opacity", opacityFactor * (reading.avgValue - minMobileLimit) / (maxMobileLimit - minMobileLimit));
+    }
   }
+  else{
+    var staticData = staticSensorReadings[date];
+    var mobileData = mobileSensorReadings[date];
+    // Draw static sensors
+    for (var i = 0; i < staticData.length; i++) {
+      var reading = staticData[i];
+      var xPos = (reading.Long - minLong) / (maxLong - minLong) * imageWidth;
+      var yPos = (1 - (reading.Lat - minLat) / (maxLat - minLat)) * imageHeight;
+      svg.append("circle")
+        .attr("class", "accu-sensor")
+        .attr("data-value", date)
+        .attr("cx", xPos)
+        .attr("cy", yPos)
+        .attr("r", accuSensorRadius)
+        .style("fill", "red")
+        .style("fill-opacity", opacityFactor * (reading.Value - minStaticLimit) / (maxStaticLimit - minStaticLimit));
+    }
 
-  // Draw mobile sensors
-  for(var sensorId in avgMobileSensors) {
-    var reading = avgMobileSensors[sensorId];
-    var xPos = (reading.avgLong - minLong) / (maxLong - minLong) * imageWidth;
-    var yPos = (1 - (reading.avgLat - minLat) / (maxLat - minLat)) * imageHeight;
-    svg.append("circle")
-      .attr("class", "accu-sensor")
-      .attr("data-value", date)
-      .attr("cx", xPos)
-      .attr("cy", yPos)
-      .attr("r", accuSensorRadius)
-      .style("fill", "red")
-      .style("fill-opacity", opacityFactor * (reading.avgValue - minMobileLimit) / (maxMobileLimit - minMobileLimit));
+    // Draw mobile sensors
+    for (var i = 0; i < mobileData.length; i++) {
+      var reading = mobileData[i];
+      var xPos = (reading.Long - minLong) / (maxLong - minLong) * imageWidth;
+      var yPos = (1 - (reading.Lat - minLat) / (maxLat - minLat)) * imageHeight;
+      svg.append("circle")
+        .attr("class", "accu-sensor")
+        .attr("data-value", date)
+        .attr("cx", xPos)
+        .attr("cy", yPos)
+        .attr("r", accuSensorRadius)
+        .style("fill", "red")
+        .style("fill-opacity", opacityFactor * (reading.Value - minMobileLimit) / (maxMobileLimit - minMobileLimit));
+    }
   }
 }
 
@@ -472,29 +580,44 @@ function drawMobileLine(value){
 }
 
 function drawStaticLines(date){
-  /*var staticData = staticSensorReadings[date];
-  for (var i = 0; i < staticData.length; i++) { 
-    drawStaticLine(staticData[i].Value);  
-  }*/
-  var avgStaticSensors = avgStaticReadings[date];
-  for(var sensorId in avgStaticSensors){
-    drawStaticLine(avgStaticSensors[sensorId].avgValue);
+  if(averaging){
+    var avgStaticSensors = avgStaticReadings[date];
+    for (var sensorId in avgStaticSensors) {
+      drawStaticLine(avgStaticSensors[sensorId].avgValue);
+    }
+  }
+  else{
+    var staticData = staticSensorReadings[date];
+    for (var i = 0; i < staticData.length; i++) {
+      drawStaticLine(staticData[i].Value);
+    }
   }
 }
 
 function drawMobileLines(date){
-  /*var mobileData = mobileSensorReadings[date];
-  for (var i = 0; i < mobileData.length; i++) { 
-    drawMobileLine(mobileData[i].Value);  
-  }*/
-  var avgMobileSensors = avgMobileReadings[date];
-  for(var sensorId in avgMobileSensors){
-    drawMobileLine(avgMobileSensors[sensorId].avgValue);
+  if(averaging){
+    var avgMobileSensors = avgMobileReadings[date];
+    for (var sensorId in avgMobileSensors) {
+      drawMobileLine(avgMobileSensors[sensorId].avgValue);
+    }
+  }
+  else{
+    var mobileData = mobileSensorReadings[date];
+    for (var i = 0; i < mobileData.length; i++) {
+      drawMobileLine(mobileData[i].Value);
+    }
   }
 }
 
 function closestHourAfter(date) {
-  p = 60 * 60 * 1000; // milliseconds in an hour
+  var hourMs = 1000*60*60;
   var d = new Date(date);
-  return formatTime(new Date(Math.ceil(d.getTime() / p ) * p));
+  return formatTime(new Date(Math.ceil(d.getTime() / hourMs ) * hourMs));
+}
+
+function onModeChange(select){
+  var val = select.options[select.selectedIndex].value;
+  averaging = (val == "average");
+  d3.selectAll(".accu-sensor").remove();
+  updateVisualization(currentDate);
 }

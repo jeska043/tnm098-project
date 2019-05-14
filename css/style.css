@@ -131,8 +131,8 @@ html, body{
 
 .accu-label{
   position: absolute;
-  top: 600px;
-  left: 245px;
+  top: 650px;
+  left: 240px;
   font-weight: normal;
   font-size: 15px;
 }
@@ -213,4 +213,21 @@ html, body{
   font-size: 15px;
   width: 50px;
   text-align: center;
+}
+
+.mode-section{
+  width: 220px;
+  height: 20px;
+  position: absolute;
+  top: 600px;
+  left: 230px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.mode-select{
+  display: inline-block;
+  cursor: pointer;
+  margin-left: 8px;
 }
