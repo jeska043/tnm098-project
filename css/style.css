@@ -223,3 +223,34 @@ html, body{
   top: 577px;
   cursor: pointer;
 }
+
+.map-buttons{
+  position: absolute;
+  top: 700px;
+  left: 90px;
+  z-index: 5;
+}
+
+.map-button{
+  cursor: pointer;
+  width: 96px;
+  height: 80px;
+  background-size: 100%;
+  margin-left: 10px;
+}
+
+#map-button1{
+  background-image: url("../images/StHimarkMapBlank.png");
+}
+
+#map-button2{
+  background-image: url("../images/StHimarkNeighborhoodMapNoLabels.png");
+}
+
+#map-button3{
+  background-image: url("../images/StHimarkNeighborhoodMap.png");
+}
+
+#map-button4{
+  background-image: url("../images/StHimarkLabeledMap.png");
+}

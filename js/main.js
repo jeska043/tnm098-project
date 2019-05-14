@@ -10,7 +10,7 @@ imageHeight *= scaling;
 var currentSensorRadius = 35;
 var accuSensorRadius = 12;
 
-var nuclearPlantRadius = 12;
+var nuclearPlantRadius = 8;
 
 // "x"-range
 var minLong = -120;
@@ -102,6 +102,7 @@ gradient.append("stop")
 
 // Append background image
 svg.append("image")
+.attr("class", "background-image")
 .attr("xlink:href","./images/StHimarkMapBlank.png")
 .attr("x", 0)
 .attr("y", 0)
@@ -110,6 +111,7 @@ svg.append("image")
 
 // Append nuclear plant
 svg.append("circle")
+.attr("class", "nuclear-plant")
 .attr("cx", nuclearPlantX)
 .attr("cy", nuclearPlantY)
 .attr("r", nuclearPlantRadius)
@@ -117,6 +119,7 @@ svg.append("circle")
 .style("stroke", "black")
 .style("fill-opacity", 1);
 svg.append("circle")
+.attr("class", "nuclear-plant-center")
 .attr("cx", nuclearPlantX)
 .attr("cy", nuclearPlantY)
 .attr("r", 1)
@@ -720,4 +723,31 @@ var mobileLineMode = "all";
 function onMobileLinesChange(select){
   mobileLineMode = select.options[select.selectedIndex].value;
   updateVisualization(currentDate);
+}
+
+function onMapButtonClick(button){
+  d3.select(".background-image")
+  .attr("xlink:href", button.value);
+  if(button.value == "./images/StHimarkMapBlank.png" || button.value == "./images/StHimarkNeighborhoodMapNoLabels.png"){
+    showNuclearPlant();
+  }
+  else{
+    hideNuclearPlant();
+  }
+}
+
+function showNuclearPlant(){
+  d3.select(".nuclear-plant")
+  .attr("visibility", "visible");
+
+  d3.select(".nuclear-plant-center")
+  .attr("visibility", "visible");
+}
+
+function hideNuclearPlant(){
+  d3.select(".nuclear-plant")
+  .attr("visibility", "hidden");
+
+  d3.select(".nuclear-plant-center")
+  .attr("visibility", "hidden");
 }
