@@ -113,18 +113,18 @@ html, body{
   font-weight: bold;
 }
 
-.static-text{
+.static-sensor-text{
   position: absolute;
-  margin-left: 1030px;
-  margin-top: 192px;
+  left: 802px;
+  top: 532px;
   font-weight: bold;
   color: rgba(0,0,200,0.9);
 }
 
-.mobile-text{
+.mobile-sensor-text{
   position: absolute;
-  margin-left: 1024px;
-  margin-top: 224px;
+  left: 796px;
+  top: 562px;
   font-weight: bold;
   color: rgba(0,200,0,0.9);
 }
@@ -155,8 +155,8 @@ html, body{
   position: absolute;
   width: 30px;
   height: 90px;
-  top: 190px;
-  left: 1228px;
+  top: 546px;
+  left: 1010px;
   z-index: 5;
 }
 
@@ -175,8 +175,8 @@ html, body{
 
 .show-values-text{
   position: absolute;
-  top: 130px;
-  left: 1220px;
+  top: 505px;
+  left: 1000px;
   font-weight: normal;
   font-size: 15px;
   width: 40px;
@@ -187,8 +187,8 @@ html, body{
   position: absolute;
   width: 30px;
   height: 90px;
-  top: 190px;
-  left: 1160px;
+  top: 546px;
+  left: 940px;
   z-index: 5;
 }
 
@@ -207,8 +207,8 @@ html, body{
 
 .show-dist-text{
   position: absolute;
-  top: 130px;
-  left: 1140px;
+  top: 505px;
+  left: 916px;
   font-weight: normal;
   font-size: 15px;
   width: 50px;
