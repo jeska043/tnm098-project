@@ -19,6 +19,7 @@ var yScale;
 var staticBins;
 var mobileBins;
 var binWidthPixels;
+var histogram;
 
 function generateHistogram(staticValues, mobileValues) {
     //var minValue = Math.min(minStaticLimit, minMobileLimit);
@@ -45,7 +46,7 @@ function generateHistogram(staticValues, mobileValues) {
     }
 
     // Construct a new histogram generator
-    var histogram = d3.histogram()
+    var histogramGenerator = d3.histogram()
         .domain([histogramMin, histogramMax])
         .thresholds(thresholds);
 
@@ -54,8 +55,8 @@ function generateHistogram(staticValues, mobileValues) {
     //console.log("binWidthPixels: " + binWidthPixels);
 
     // Compute bins from the arrays of numbers
-    staticBins = histogram(staticValues);
-    mobileBins = histogram(mobileValues);
+    staticBins = histogramGenerator(staticValues);
+    mobileBins = histogramGenerator(mobileValues);
     // The histogram generator returns an array of bins, where each bin is an array
     // containing the associated elements from the input data.
     // Thus, the length of each bin is the number of elements in that bin. 
@@ -85,7 +86,7 @@ function generateHistogram(staticValues, mobileValues) {
     var yAxis = d3.axisLeft(yScale);
 
     // Create SVG
-    var histogram = d3.select("#content").append("svg")
+    histogram = d3.select("#content").append("svg")
         .attr("width", svgWidth)
         .attr("height", svgHeight)
         .attr("class", "histogram")
@@ -105,47 +106,25 @@ function generateHistogram(staticValues, mobileValues) {
         .attr("transform", "translate(0,0)")
         .call(yAxis);
 
-    // Append a "bar-mobile" class to every bin in mobileBins and define how they should be translated
-    var barMobile = histogram.selectAll(".bar-mobile")
-        .data(mobileBins)
-        .enter().append("g")
-        .attr("class", "bar-mobile")
-        .attr("transform", function (d) { return "translate(" + xScale(d.x0) + "," + yScale(d.length) + ")"; });
-
-    barMobile.append("rect")
-        .attr("x", 1)
-        .attr("width", binWidthPixels - 1)
-        .attr("height", function (d) { return histogramHeight - yScale(d.length); });
-
-    // Append a "bar-static" class to every bin in staticBins and define how they should be translated
-    var barStatic = histogram.selectAll(".bar-static")
-        .data(staticBins)
-        .enter().append("g")
-        .attr("class", "bar-static")
-        .attr("transform", function (d) { return "translate(" + xScale(d.x0) + "," + yScale(d.length) + ")"; });
-
-    barStatic.append("rect")
-        .attr("x", 1)
-        .attr("width", binWidthPixels - 1)
-        .attr("height", function (d) { return histogramHeight - yScale(d.length); });
-
-    return histogram;
+    // Draw distributions
+    drawMobileDist();
+    drawStaticDist();
 }
 
 function toggleShowStaticDist(checkbox){
     showStaticDist = checkbox.checked;
-    updateHistogram();
+    redrawDistributions();
 }
 
 function toggleShowMobileDist(checkbox){
     showMobileDist = checkbox.checked;
-    updateHistogram();
+    redrawDistributions();
 }
 
 var showStaticDist = true;
 var showMobileDist = true;
 
-function updateHistogram(){
+function redrawDistributions(){
     d3.selectAll(".bar-mobile").remove();
     d3.selectAll(".bar-static").remove();
     if(showMobileDist){
@@ -157,6 +136,7 @@ function updateHistogram(){
 }
 
 function drawMobileDist(){
+    // Append a "bar-mobile" class to every bin in mobileBins and define how they should be translated
     var barMobile = histogram.selectAll(".bar-mobile")
         .data(mobileBins)
         .enter().append("g")
@@ -170,6 +150,7 @@ function drawMobileDist(){
 }
 
 function drawStaticDist(){
+    // Append a "bar-static" class to every bin in staticBins and define how they should be translated
     var barStatic = histogram.selectAll(".bar-static")
         .data(staticBins)
         .enter().append("g")
@@ -180,4 +161,104 @@ function drawStaticDist(){
         .attr("x", 1)
         .attr("width", binWidthPixels - 1)
         .attr("height", function (d) { return histogramHeight - yScale(d.length); });
+}
+
+function drawStaticLine(value){
+    if(value > 0){
+      histogram.append("line")
+      .attr("class", "static-line")
+      .attr("x1", xScale(value))
+      .attr("y1", 0)
+      .attr("x2", xScale(value))
+      .attr("y2", histogramHeight)
+      .attr("style", "stroke:rgba(0,0,200,0.9);stroke-width:1");
+    }
+  }
+  
+  function drawMobileLine(value){
+    if(value > 0){
+      histogram.append("line")
+      .attr("class", "mobile-line")
+      .attr("x1", xScale(value))
+      .attr("y1", 0)
+      .attr("x2", xScale(value))
+      .attr("y2", histogramHeight)
+      .attr("style", "stroke:rgba(0,200,0,0.9);stroke-width:1");
+    }
+  }
+
+function drawStaticLines(date) {
+    var lines = 0;
+    var lineVal = 0;
+    if (averaging) {
+        var avgStaticSensors = avgStaticReadings[date];
+        for (var sensorId in avgStaticSensors) {
+            if (staticLineMode == "all") {
+                drawStaticLine(avgStaticSensors[sensorId].avgValue);
+            }
+            else if (staticLineMode == "average") {
+                lineVal += avgStaticSensors[sensorId].avgValue;
+                lines++;
+            }
+        }    
+    }
+    else {
+        var staticData = staticSensorReadings[date];
+        for (var i = 0; i < staticData.length; i++) {
+            if (staticLineMode == "all") {
+                drawStaticLine(staticData[i].Value);
+            }
+            else if (staticLineMode == "average") {
+                lineVal += staticData[i].Value;
+                lines++;
+            }
+        }
+    }
+    if (lines > 0) {
+        drawStaticLine(lineVal / lines);
+    }
+}
+  
+  function drawMobileLines(date){
+    var lines = 0;
+    var lineVal = 0;
+    if(averaging){
+      var avgMobileSensors = avgMobileReadings[date];
+      for (var sensorId in avgMobileSensors) {
+        if(mobileLineMode == "all"){
+          drawMobileLine(avgMobileSensors[sensorId].avgValue);
+        }
+        else if(mobileLineMode == "average"){
+            lineVal += avgMobileSensors[sensorId].avgValue;
+            lines++;
+        }
+      }
+    }
+    else{
+      var mobileData = mobileSensorReadings[date];
+      for (var i = 0; i < mobileData.length; i++) {
+        if(mobileLineMode == "all"){
+          drawMobileLine(mobileData[i].Value);
+        }
+        else if(mobileLineMode == "average"){
+            lineVal += mobileData[i].Value;
+            lines++;
+        }
+      }
+    }
+    if(lines > 0){
+      drawMobileLine(lineVal/lines);
+    }
+  }
+
+var staticLineMode = "all";
+function onStaticLinesChange(select) {
+    staticLineMode = select.options[select.selectedIndex].value;
+    updateVisualization(currentDate);
+}
+
+var mobileLineMode = "all";
+function onMobileLinesChange(select) {
+    mobileLineMode = select.options[select.selectedIndex].value;
+    updateVisualization(currentDate);
 }
