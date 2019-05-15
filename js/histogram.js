@@ -203,7 +203,7 @@ function drawStaticLines(date) {
         }    
     }
     else {
-        var staticData = staticSensorReadings[date];
+        var staticData = currentStaticReadings[date];
         for (var i = 0; i < staticData.length; i++) {
             if (staticLineMode == "all") {
                 drawStaticLine(staticData[i].Value);
@@ -235,7 +235,7 @@ function drawStaticLines(date) {
       }
     }
     else{
-      var mobileData = mobileSensorReadings[date];
+      var mobileData = currentMobileReadings[date];
       for (var i = 0; i < mobileData.length; i++) {
         if(mobileLineMode == "all"){
           drawMobileLine(mobileData[i].Value);

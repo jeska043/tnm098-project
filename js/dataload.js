@@ -9,8 +9,8 @@ var maxMobileLimit = 100;
 // Store data in these
 var staticSensorLocations = {};
 
-var staticSensorReadings = {};
-var mobileSensorReadings = {};
+var currentStaticReadings = {};
+var currentMobileReadings = {};
 
 var avgStaticReadings = {};
 var avgMobileReadings = {};
@@ -59,11 +59,11 @@ d3.csv("./data/StaticSensorLocations.csv").then(function(array){
               "Value": value
             };
             // Save the reading
-            if(staticSensorReadings[element.Timestamp]){
-              staticSensorReadings[element.Timestamp].push(reading);
+            if(currentStaticReadings[element.Timestamp]){
+              currentStaticReadings[element.Timestamp].push(reading);
             }
             else{
-              staticSensorReadings[element.Timestamp] = [reading];
+              currentStaticReadings[element.Timestamp] = [reading];
             }
           }
           // For average
@@ -131,11 +131,11 @@ d3.csv("./data/MobileSensorReadings.csv").then(function(array){
           "Value": value
         };
         // Save the reading
-        if(mobileSensorReadings[element.Timestamp]){
-          mobileSensorReadings[element.Timestamp].push(reading);
+        if(currentMobileReadings[element.Timestamp]){
+          currentMobileReadings[element.Timestamp].push(reading);
         }
         else{
-          mobileSensorReadings[element.Timestamp] = [reading];
+          currentMobileReadings[element.Timestamp] = [reading];
         }
       }
       // For average

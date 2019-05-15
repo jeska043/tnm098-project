@@ -151,8 +151,8 @@ function updateVisualization(date){
     else{
       // Neither averaging or accumulating
       // Show only the current values for the selected date
-      var staticData = staticSensorReadings[date];
-      var mobileData = mobileSensorReadings[date];
+      var staticData = currentStaticReadings[date];
+      var mobileData = currentMobileReadings[date];
 
       // Current static data
       var staticLines = 0;
@@ -303,8 +303,8 @@ function drawAccuCircles(date){
   }
   else{
     // Accumulating but not averaging
-    var staticData = staticSensorReadings[date];
-    var mobileData = mobileSensorReadings[date];
+    var staticData = currentStaticReadings[date];
+    var mobileData = currentMobileReadings[date];
     // Draw static sensors
     for (var i = 0; i < staticData.length; i++) {
       var reading = staticData[i];
