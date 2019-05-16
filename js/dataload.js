@@ -66,7 +66,7 @@ d3.csv("./data/StaticSensorLocations.csv").then(function(array){
               currentStaticReadings[element.Timestamp] = [reading];
             }
           }
-          // For average
+          // For average the last hour
           if(avgStaticReadings[closestHour]){
             if(avgStaticReadings[closestHour][sensorId]){
               avgStaticReadings[closestHour][sensorId].avgValue += value;
@@ -138,10 +138,10 @@ d3.csv("./data/MobileSensorReadings.csv").then(function(array){
           currentMobileReadings[element.Timestamp] = [reading];
         }
       }
-      // For average
+      // For average the last hour
       var closestHour = closestHourAfter(element.Timestamp);
       var sensorId = element['Sensor-id'];
-      // Save value for histogram
+      
       if(avgMobileReadings[closestHour]){
         if(avgMobileReadings[closestHour][sensorId]){
           avgMobileReadings[closestHour][sensorId].avgLong += parseFloat(element.Long);
@@ -168,6 +168,7 @@ d3.csv("./data/MobileSensorReadings.csv").then(function(array){
           "count": 1 // count will be the number of readings this hour for this sensor
         };
       } 
+      // Save value for histogram
       mobileValues.push(value);
     }
   });
