@@ -95,44 +95,44 @@ html, body{
 .histogram {
   position: absolute;
   margin-left: 20px;
-  margin-top: 50px;
+  margin-top: 40px;
   /*border: 1px solid black;*/
 }
 
 .histogram-title{
   position: absolute;
   margin-left: 890px;
-  margin-top: 20px;
+  margin-top: 10px;
   font-weight: bold;
 }
 
 .cpm{
   position: absolute;
-  margin-left: 910px;
-  margin-top: 470px;
+  left: 910px;
+  top: 420px;
   font-weight: bold;
 }
 
 .static-sensor-text{
   position: absolute;
-  left: 802px;
-  top: 532px;
+  left: 772px;
+  top: 480px;
   font-weight: bold;
   color: rgba(0,0,200,0.9);
 }
 
 .mobile-sensor-text{
   position: absolute;
-  left: 796px;
-  top: 562px;
+  left: 766px;
+  top: 511px;
   font-weight: bold;
   color: rgba(0,200,0,0.9);
 }
 
 .accu-label{
   position: absolute;
-  top: 650px;
-  left: 240px;
+  top: 513px;
+  left: 420px;
   font-weight: normal;
   font-size: 15px;
 }
@@ -153,8 +153,8 @@ html, body{
 
 .show-values-text{
   position: absolute;
-  top: 505px;
-  left: 1020px;
+  top: 455px;
+  left: 990px;
   font-weight: normal;
   font-size: 15px;
   width: 40px;
@@ -165,8 +165,8 @@ html, body{
   position: absolute;
   width: 30px;
   height: 90px;
-  top: 546px;
-  left: 940px;
+  top: 495px;
+  left: 910px;
   z-index: 5;
 }
 
@@ -185,8 +185,8 @@ html, body{
 
 .show-dist-text{
   position: absolute;
-  top: 505px;
-  left: 916px;
+  top: 455px;
+  left: 886px;
   font-weight: normal;
   font-size: 15px;
   width: 50px;
@@ -197,8 +197,8 @@ html, body{
   width: 220px;
   height: 20px;
   position: absolute;
-  top: 600px;
-  left: 230px;
+  top: 518px;
+  left: 30px;
   cursor: pointer;
   font-weight: bold;
   font-size: 15px;
@@ -212,31 +212,31 @@ html, body{
 
 .static-lines-select{
   position: absolute;
-  left: 1000px;
-  top: 546px;
+  left: 970px;
+  top: 495px;
   cursor: pointer;
 }
 
 .mobile-lines-select{
   position: absolute;
-  left: 1000px;
-  top: 577px;
+  left: 970px;
+  top: 526px;
   cursor: pointer;
 }
 
 .map-buttons{
   position: absolute;
-  top: 700px;
-  left: 90px;
+  top: 6px;
+  left: 4px;
   z-index: 5;
 }
 
 .map-button{
   cursor: pointer;
-  width: 96px;
-  height: 80px;
+  width: 41px;
+  height: 34px;
   background-size: 100%;
-  margin-left: 10px;
+  margin-left: 4px;
 }
 
 #map-button1{

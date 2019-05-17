@@ -3,7 +3,7 @@ var numberOfBins = 100;
 
 // SVG size
 var svgWidth = 995;
-var svgHeight = 700;
+var svgHeight = 680;
 
 var scaling = 0.6;
 svgWidth *= scaling;
