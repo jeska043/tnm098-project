@@ -1,7 +1,7 @@
 // Sensor values outside these limits will be discarded.
 // Use the histogram to decide these.
 var minStaticLimit = 0;
-var maxStaticLimit = 40;
+var maxStaticLimit = 35;
 
 var minMobileLimit = 0;
 var maxMobileLimit = 100;
@@ -34,8 +34,7 @@ d3.csv("./data/StaticSensorLocations.csv").then(function(array){
       .attr("class", "static-sensor-dot")
       .attr("cx", xPos)
       .attr("cy", yPos)
-      .attr("r", 1)
-      .style("fill", "black");
+      .attr("r", 1);
   });
   console.log("Static sensor locations retrieved.")
 })

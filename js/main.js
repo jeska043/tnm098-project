@@ -7,8 +7,8 @@ imageWidth *= scaling;
 imageHeight *= scaling;
 
 // Circle sizes
-var currentSensorRadius = 35;
-var accuSensorRadius = 12;
+var currentSensorRadius = 40;
+var accuSensorRadius = 14;
 
 var nuclearPlantRadius = 8;
 
@@ -105,7 +105,7 @@ function updateVisualization(date){
           .attr("cy", yPos)
           .attr("r", currentSensorRadius)
           .style("fill", "url(#myGradient)")
-          .style("fill-opacity", (reading.avgValue - minStaticLimit) / (maxStaticLimit - minStaticLimit));
+          .style("fill-opacity", (reading.avgValue - staticDangerValue) / (maxStaticLimit - staticDangerValue));
   
         if(staticLineMode == "all"){
           drawStaticLine(reading.avgValue);
@@ -133,7 +133,7 @@ function updateVisualization(date){
           .attr("cy", yPos)
           .attr("r", currentSensorRadius)
           .style("fill", "url(#myGradient)")
-          .style("fill-opacity", (reading.avgValue - minMobileLimit) / (maxMobileLimit - minMobileLimit));
+          .style("fill-opacity", (reading.avgValue - mobileDangerValue) / (maxMobileLimit - mobileDangerValue));
 
         if(mobileLineMode == "all"){
           drawMobileLine(reading.avgValue);
@@ -167,7 +167,7 @@ function updateVisualization(date){
           .attr("cy", yPos)
           .attr("r", currentSensorRadius)
           .style("fill", "url(#myGradient)")
-          .style("fill-opacity", (reading.Value - minStaticLimit) / (maxStaticLimit - minStaticLimit));
+          .style("fill-opacity", (reading.Value - staticDangerValue) / (maxStaticLimit - staticDangerValue));
 
         if(staticLineMode == "all"){
           drawStaticLine(reading.Value);
@@ -195,7 +195,7 @@ function updateVisualization(date){
           .attr("cy", yPos)
           .attr("r", currentSensorRadius)
           .style("fill", "url(#myGradient)")
-          .style("fill-opacity", (reading.Value - minMobileLimit) / (maxMobileLimit - minMobileLimit));
+          .style("fill-opacity", (reading.Value - mobileDangerValue) / (maxMobileLimit - mobileDangerValue));
   
         if(mobileLineMode == "all"){
           drawMobileLine(reading.Value);
@@ -265,7 +265,7 @@ function getDatesUpUntil(date){
 }
 
 function drawAccuCircles(date){
-  var opacityFactor = 0.025;
+  var opacityFactor = 0.065;
   if(averaging){
     // Accumulating and averaging
     var avgStaticSensors = avgStaticReadings[date];
@@ -283,7 +283,7 @@ function drawAccuCircles(date){
         .attr("cy", yPos)
         .attr("r", accuSensorRadius)
         .style("fill", "red")
-        .style("fill-opacity", opacityFactor * (reading.avgValue - minStaticLimit) / (maxStaticLimit - minStaticLimit));
+        .style("fill-opacity", opacityFactor * (reading.avgValue - staticDangerValue) / (maxStaticLimit - staticDangerValue));
     }
 
     // Draw avg mobile sensors
@@ -298,7 +298,7 @@ function drawAccuCircles(date){
         .attr("cy", yPos)
         .attr("r", accuSensorRadius)
         .style("fill", "red")
-        .style("fill-opacity", opacityFactor * (reading.avgValue - minMobileLimit) / (maxMobileLimit - minMobileLimit));
+        .style("fill-opacity", opacityFactor * (reading.avgValue - mobileDangerValue) / (maxMobileLimit - mobileDangerValue));
     }
   }
   else{
@@ -317,7 +317,7 @@ function drawAccuCircles(date){
         .attr("cy", yPos)
         .attr("r", accuSensorRadius)
         .style("fill", "red")
-        .style("fill-opacity", opacityFactor * (reading.Value - minStaticLimit) / (maxStaticLimit - minStaticLimit));
+        .style("fill-opacity", opacityFactor * (reading.Value - staticDangerValue) / (maxStaticLimit - staticDangerValue));
     }
 
     // Draw mobile sensors
@@ -332,7 +332,7 @@ function drawAccuCircles(date){
         .attr("cy", yPos)
         .attr("r", accuSensorRadius)
         .style("fill", "red")
-        .style("fill-opacity", opacityFactor * (reading.Value - minMobileLimit) / (maxMobileLimit - minMobileLimit));
+        .style("fill-opacity", opacityFactor * (reading.Value - mobileDangerValue) / (maxMobileLimit - mobileDangerValue));
     }
   }
 }

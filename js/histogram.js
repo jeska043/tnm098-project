@@ -21,6 +21,9 @@ var mobileBins;
 var binWidthPixels;
 var histogram;
 
+var staticDangerValue = 15.1;
+var mobileDangerValue = 45;
+
 function generateHistogram(staticValues, mobileValues) {
     //var minValue = Math.min(minStaticLimit, minMobileLimit);
     var maxValue = Math.max(maxStaticLimit, maxMobileLimit);
@@ -109,6 +112,9 @@ function generateHistogram(staticValues, mobileValues) {
     // Draw distributions
     drawMobileDist();
     drawStaticDist();
+    // Draw danger values
+    drawStaticDangerLine(staticDangerValue);
+    drawMobileDangerLine(mobileDangerValue);
 }
 
 function toggleShowStaticDist(checkbox){
@@ -170,8 +176,7 @@ function drawStaticLine(value){
       .attr("x1", xScale(value))
       .attr("y1", 0)
       .attr("x2", xScale(value))
-      .attr("y2", histogramHeight)
-      .attr("style", "stroke:rgba(0,0,200,0.9);stroke-width:1");
+      .attr("y2", histogramHeight);
     }
   }
   
@@ -182,8 +187,7 @@ function drawStaticLine(value){
       .attr("x1", xScale(value))
       .attr("y1", 0)
       .attr("x2", xScale(value))
-      .attr("y2", histogramHeight)
-      .attr("style", "stroke:rgba(0,200,0,0.9);stroke-width:1");
+      .attr("y2", histogramHeight);
     }
   }
 
@@ -261,4 +265,26 @@ var mobileLineMode = "all";
 function onMobileLinesChange(select) {
     mobileLineMode = select.options[select.selectedIndex].value;
     updateVisualization(currentDate);
+}
+
+function drawStaticDangerLine(value){
+    if(value > 0){
+        histogram.append("line")
+        .attr("class", "static-danger-line")
+        .attr("x1", xScale(value))
+        .attr("y1", 0)
+        .attr("x2", xScale(value))
+        .attr("y2", histogramHeight);
+      }
+}
+
+function drawMobileDangerLine(value){
+    if(value > 0){
+        histogram.append("line")
+        .attr("class", "mobile-danger-line")
+        .attr("x1", xScale(value))
+        .attr("y1", 0)
+        .attr("x2", xScale(value))
+        .attr("y2", histogramHeight);
+      }
 }

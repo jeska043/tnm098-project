@@ -31,15 +31,41 @@ html, body{
 }
 
   .bar-static rect {
-    fill: rgb(0, 0, 200);
+    fill: rgb(41, 0, 189);
     shape-rendering: crispEdges;
     opacity: 0.7;
   }
 
   .bar-mobile rect {
-    fill: rgb(0, 200, 0);
+    fill: rgb(6, 179, 0);
     shape-rendering: crispEdges;
     opacity: 0.9;
+  }
+
+  .static-line{
+    stroke:rgba(41, 0, 189,0.9);
+    stroke-width: 1;
+  }
+
+  .mobile-line{
+    stroke:rgba(6, 179, 0,0.9);
+    stroke-width: 1;
+  }
+
+  .static-danger-line{
+    stroke:rgba(41, 0, 189, 1);
+    stroke-width: 1;
+    stroke-dasharray: 4, 2;
+  }
+
+  .static-sensor-dot{
+    fill: rgba(0, 0, 0, 1);
+  }
+
+  .mobile-danger-line{
+    stroke:rgba(6, 179, 0, 1);
+    stroke-width: 1;
+    stroke-dasharray: 4, 2;
   }
   
   .bar text {
