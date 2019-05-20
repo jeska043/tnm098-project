@@ -1,0 +1,35 @@
+#timeslider {
+    position: absolute;
+    top: 500px;
+    width: 840px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#timebox {
+    width: 50%;
+    margin-left: 240px;
+    margin-right: 2px;
+    z-index: 999;
+    padding: 4px;
+}
+
+#value-time{
+    left: 300px;
+    font-size: small;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+#sizeslider {
+    position: relative;
+    top: 90%;
+    height: 5%;
+    width: 800px;
+}
+
+#value-size {
+    top: 0px;
+    height: 50%;
+    width: 100%;
+}

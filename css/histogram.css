@@ -1,0 +1,169 @@
+.histogram {
+    position: absolute;
+    margin-left: 20px;
+    margin-top: 40px;
+  }
+  
+  .histogram-title{
+    position: absolute;
+    margin-left: 890px;
+    margin-top: 10px;
+    font-weight: bold;
+  }
+
+  .bar text {
+    fill: #fff;
+  }
+  
+  .axis path, .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+  }
+  
+  .cpm{
+    position: absolute;
+    left: 910px;
+    top: 420px;
+    font-weight: normal;
+    font-size: 14px;
+  }
+
+/* Histogram bars */
+.bar-static rect {
+    fill: rgb(41, 0, 189);
+    shape-rendering: crispEdges;
+    opacity: 0.7;
+  }
+
+  .bar-mobile rect {
+    fill: rgb(6, 179, 0);
+    shape-rendering: crispEdges;
+    opacity: 0.9;
+  }
+
+  /* Sensor lines */
+  .static-line{
+    stroke:rgba(41, 0, 189,0.9);
+    stroke-width: 1;
+  }
+
+  .mobile-line{
+    stroke:rgba(6, 179, 0,0.9);
+    stroke-width: 1;
+  }
+
+  /* Danger lines */
+  .static-danger-line{
+    stroke:rgba(41, 0, 189, 1);
+    stroke-width: 2;
+    stroke-dasharray: 7, 4;
+  }
+
+  .mobile-danger-line{
+    stroke:rgba(6, 179, 0, 1);
+    stroke-width: 2;
+    stroke-dasharray: 7, 4;
+  }
+
+  /* Legend */
+  .static-sensor-text{
+    position: absolute;
+    left: 700px;
+    top: 480px;
+    font-weight: bold;
+    color: rgba(0,0,200,0.9);
+  }
+  
+  .mobile-sensor-text{
+    position: absolute;
+    left: 694px;
+    top: 511px;
+    font-weight: bold;
+    color: rgba(0,200,0,0.9);
+  }
+
+  /* Distribution select */
+  .show-dist-text{
+    position: absolute;
+    top: 455px;
+    left: 830px;
+    font-weight: bold;
+    font-size: 15px;
+    width: 50px;
+    text-align: center;
+  }
+  
+  .show-dist-checkboxes{
+    position: absolute;
+    width: 30px;
+    height: 90px;
+    top: 495px;
+    left: 855px;
+    z-index: 5;
+  }
+
+  .static-dist-checkbox{
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+  }
+  
+  .mobile-dist-checkbox{
+    margin-top: 10px;
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Values select */
+  .show-values-text{
+    position: absolute;
+    top: 455px;
+    left: 940px;
+    font-weight: bold;
+    font-size: 15px;
+    width: 40px;
+    text-align: center;
+  }
+
+  .static-lines-select{
+    position: absolute;
+    left: 920px;
+    top: 495px;
+    cursor: pointer;
+  }
+  
+  .mobile-lines-select{
+    position: absolute;
+    left: 920px;
+    top: 526px;
+    cursor: pointer;
+  }
+
+  /* Indication threshold (danger values) */
+  .indication-text{
+    position: absolute;
+    left: 1053px;
+    top: 436px;
+    width: 100px;
+    font-weight: bold;
+    font-size: 15px;
+  }
+
+  .danger-value-inputs{
+    position: absolute;
+    left: 1050px;
+    top: 494px;
+    width: 100px;
+  }
+  
+  .mobile-danger-value-input{
+    margin-top: 12px;
+    height: 14px;
+  }
+  
+  .static-danger-value-input{
+    height: 14px;
+  }
+  

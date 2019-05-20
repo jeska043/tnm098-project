@@ -30,131 +30,13 @@ html, body{
     100% { transform: rotate(360deg); }
 }
 
-  .bar-static rect {
-    fill: rgb(41, 0, 189);
-    shape-rendering: crispEdges;
-    opacity: 0.7;
-  }
-
-  .bar-mobile rect {
-    fill: rgb(6, 179, 0);
-    shape-rendering: crispEdges;
-    opacity: 0.9;
-  }
-
-  .static-line{
-    stroke:rgba(41, 0, 189,0.9);
-    stroke-width: 1;
-  }
-
-  .mobile-line{
-    stroke:rgba(6, 179, 0,0.9);
-    stroke-width: 1;
-  }
-
-  .static-danger-line{
-    stroke:rgba(41, 0, 189, 1);
-    stroke-width: 2;
-    stroke-dasharray: 5, 2;
-  }
-
   .static-sensor-dot{
     fill: rgba(0, 0, 0, 1);
-  }
-
-  .mobile-danger-line{
-    stroke:rgba(6, 179, 0, 1);
-    stroke-width: 2;
-    stroke-dasharray: 5, 2;
-  }
-  
-  .bar text {
-    fill: #fff;
-  }
-  
-  .axis path, .axis line {
-    fill: none;
-    stroke: #000;
-    shape-rendering: crispEdges;
   }
 
   .map{
       border: 1px solid black;
   }
-
-#timeslider {
-    position: absolute;
-    top: 500px;
-    width: 840px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-#timebox {
-    width: 50%;
-    margin-left: 240px;
-    margin-right: 2px;
-    z-index: 999;
-    padding: 4px;
-}
-
-#value-time{
-    left: 300px;
-    font-size: small;
-    font-weight: bold;
-    font-size: 15px;
-}
-
-#sizeslider {
-    position: relative;
-    top: 90%;
-    height: 5%;
-    width: 800px;
-}
-
-#value-size {
-    top: 0px;
-    height: 50%;
-    width: 100%;
-}
-
-.histogram {
-  position: absolute;
-  margin-left: 20px;
-  margin-top: 40px;
-  /*border: 1px solid black;*/
-}
-
-.histogram-title{
-  position: absolute;
-  margin-left: 890px;
-  margin-top: 10px;
-  font-weight: bold;
-}
-
-.cpm{
-  position: absolute;
-  left: 910px;
-  top: 420px;
-  font-weight: normal;
-  font-size: 14px;
-}
-
-.static-sensor-text{
-  position: absolute;
-  left: 700px;
-  top: 480px;
-  font-weight: bold;
-  color: rgba(0,0,200,0.9);
-}
-
-.mobile-sensor-text{
-  position: absolute;
-  left: 694px;
-  top: 511px;
-  font-weight: bold;
-  color: rgba(0,200,0,0.9);
-}
 
 .accu-label{
   position: absolute;
@@ -178,48 +60,6 @@ html, body{
   cursor: pointer;
 }
 
-.show-values-text{
-  position: absolute;
-  top: 455px;
-  left: 940px;
-  font-weight: bold;
-  font-size: 15px;
-  width: 40px;
-  text-align: center;
-}
-
-.show-dist-checkboxes{
-  position: absolute;
-  width: 30px;
-  height: 90px;
-  top: 495px;
-  left: 855px;
-  z-index: 5;
-}
-
-.mobile-dist-checkbox{
-  margin-top: 10px;
-  cursor: pointer;
-  width: 16px;
-  height: 16px;
-}
-
-.static-dist-checkbox{
-  cursor: pointer;
-  width: 16px;
-  height: 16px;
-}
-
-.show-dist-text{
-  position: absolute;
-  top: 455px;
-  left: 830px;
-  font-weight: bold;
-  font-size: 15px;
-  width: 50px;
-  text-align: center;
-}
-
 .mode-section{
   width: 220px;
   height: 20px;
@@ -235,20 +75,6 @@ html, body{
   display: inline-block;
   cursor: pointer;
   margin-left: 8px;
-}
-
-.static-lines-select{
-  position: absolute;
-  left: 920px;
-  top: 495px;
-  cursor: pointer;
-}
-
-.mobile-lines-select{
-  position: absolute;
-  left: 920px;
-  top: 526px;
-  cursor: pointer;
 }
 
 .map-buttons{
@@ -280,29 +106,4 @@ html, body{
 
 #map-button4{
   background-image: url("../images/StHimarkLabeledMap.png");
-}
-
-.danger-value-form{
-  position: absolute;
-  left: 1050px;
-  top: 494px;
-  width: 100px;
-}
-
-.mobile-danger-value-input{
-  margin-top: 12px;
-  height: 14px;
-}
-
-.static-danger-value-input{
-  height: 14px;
-}
-
-.indication-text{
-  position: absolute;
-  left: 1053px;
-  top: 436px;
-  width: 100px;
-  font-weight: bold;
-  font-size: 15px;
 }
