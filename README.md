@@ -6,7 +6,7 @@ Based on Mini-Challenge 2 in the VAST Challenge 2019: https://vast-challenge.git
 ## Required to run ##
 * Download the data from the link above
 * Create a folder called __data__ and place the following files in there:
-  * StaticSensorLocations.csv
-  * StaticSensorReadings.csv
-  * MobileSensorReadings.csv
+  * _StaticSensorLocations.csv_
+  * _StaticSensorReadings.csv_
+  * _MobileSensorReadings.csv_
 * Open the html file with an HTTP server
