@@ -9,8 +9,16 @@ var dataTime = d3.range(0, 5).map(function (d) {
 var maxDate = d3.range(0, 5).map(function (d) {
     return new Date(2020, 3, 10, 23);
 });
+toggleTimeline();
 
-var sliderTime = d3
+
+function toggleTimeline(){
+var sliderTime;
+
+d3.select('.timeline').remove();
+
+if(accumulating){
+    sliderTime = d3
     .sliderBottom()
     .min(d3.min(dataTime))
     .max(d3.max(maxDate))
@@ -19,7 +27,28 @@ var sliderTime = d3
     .tickFormat('')
     .tickValues('')
     .displayValue(false)
-    .default(new Date(2020, 3, 6, 1))
+    .fill('#FF0000')
+    .default(new Date(currentDate))
+    .on('onchange', val => {
+        var newDate = formatTime(val);
+        if (newDate !== currentDate) {
+            d3.select('p#value-time').text(newDate);
+            updateVisualization(newDate);
+        }
+    });  
+}
+
+else{
+    sliderTime = d3
+    .sliderBottom()
+    .min(d3.min(dataTime))
+    .max(d3.max(maxDate))
+    .step(stepMinutes * 60 * 1000)
+    .width(550)
+    .tickFormat('')
+    .tickValues('')
+    .displayValue(false)
+    .default(new Date(currentDate))
     .on('onchange', val => {
         var newDate = formatTime(val);
         if (newDate !== currentDate) {
@@ -27,15 +56,18 @@ var sliderTime = d3
             updateVisualization(newDate);
         }
     });
-
+}
 var gTime = d3
     .select('div#slider-time')
     .append('svg')
     .attr('width', 600)
     .attr('height', 40)
+    .attr('class', 'timeline')
     .append('g')
     .attr('transform', 'translate(30,7)');
 
 gTime.call(sliderTime);
 
 d3.select('p#value-time').text(formatTime(sliderTime.value()));
+
+}

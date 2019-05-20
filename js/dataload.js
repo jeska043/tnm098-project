@@ -187,14 +187,14 @@ d3.csv("./data/MobileSensorReadings.csv").then(function(array){
   console.error(e);
 });
 
-var startDate = "2020-04-06 01:00:00";
+var currentDate = "2020-04-06 01:00:00";
 
 function checkLoadStatus(){
   if(staticDataLoaded && mobileDataLoaded){
     document.getElementById("loader").style.display = 'none';
     document.getElementById("content").style.display = 'block';
     generateHistogram(staticValues, mobileValues);
-    updateVisualization(startDate);
+    updateVisualization(currentDate);
   }
 }
 

@@ -76,7 +76,6 @@ map.append("circle")
 
 var accumulating = false;
 var averaging = true;
-var currentDate;
 
 function updateVisualization(date){
   currentDate = date;
@@ -340,6 +339,7 @@ function drawAccuCircles(date){
 function toggleAccumulate(checkbox){
   accumulating = checkbox.checked;
   updateVisualization(currentDate);
+  toggleTimeline();
 }
 
 function onModeChange(select){
