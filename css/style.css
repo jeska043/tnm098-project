@@ -54,8 +54,8 @@ html, body{
 
   .static-danger-line{
     stroke:rgba(41, 0, 189, 1);
-    stroke-width: 1;
-    stroke-dasharray: 4, 2;
+    stroke-width: 2;
+    stroke-dasharray: 5, 2;
   }
 
   .static-sensor-dot{
@@ -64,8 +64,8 @@ html, body{
 
   .mobile-danger-line{
     stroke:rgba(6, 179, 0, 1);
-    stroke-width: 1;
-    stroke-dasharray: 4, 2;
+    stroke-width: 2;
+    stroke-dasharray: 5, 2;
   }
   
   .bar text {
@@ -136,12 +136,13 @@ html, body{
   position: absolute;
   left: 910px;
   top: 420px;
-  font-weight: bold;
+  font-weight: normal;
+  font-size: 14px;
 }
 
 .static-sensor-text{
   position: absolute;
-  left: 772px;
+  left: 700px;
   top: 480px;
   font-weight: bold;
   color: rgba(0,0,200,0.9);
@@ -149,7 +150,7 @@ html, body{
 
 .mobile-sensor-text{
   position: absolute;
-  left: 766px;
+  left: 694px;
   top: 511px;
   font-weight: bold;
   color: rgba(0,200,0,0.9);
@@ -180,8 +181,8 @@ html, body{
 .show-values-text{
   position: absolute;
   top: 455px;
-  left: 990px;
-  font-weight: normal;
+  left: 940px;
+  font-weight: bold;
   font-size: 15px;
   width: 40px;
   text-align: center;
@@ -192,7 +193,7 @@ html, body{
   width: 30px;
   height: 90px;
   top: 495px;
-  left: 910px;
+  left: 855px;
   z-index: 5;
 }
 
@@ -212,8 +213,8 @@ html, body{
 .show-dist-text{
   position: absolute;
   top: 455px;
-  left: 886px;
-  font-weight: normal;
+  left: 830px;
+  font-weight: bold;
   font-size: 15px;
   width: 50px;
   text-align: center;
@@ -238,14 +239,14 @@ html, body{
 
 .static-lines-select{
   position: absolute;
-  left: 970px;
+  left: 920px;
   top: 495px;
   cursor: pointer;
 }
 
 .mobile-lines-select{
   position: absolute;
-  left: 970px;
+  left: 920px;
   top: 526px;
   cursor: pointer;
 }
@@ -279,4 +280,29 @@ html, body{
 
 #map-button4{
   background-image: url("../images/StHimarkLabeledMap.png");
+}
+
+.danger-value-form{
+  position: absolute;
+  left: 1050px;
+  top: 494px;
+  width: 100px;
+}
+
+.mobile-danger-value-input{
+  margin-top: 12px;
+  height: 14px;
+}
+
+.static-danger-value-input{
+  height: 14px;
+}
+
+.indication-text{
+  position: absolute;
+  left: 1053px;
+  top: 436px;
+  width: 100px;
+  font-weight: bold;
+  font-size: 15px;
 }

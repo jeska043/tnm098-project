@@ -23,6 +23,8 @@ var histogram;
 
 var staticDangerValue = 15.1;
 var mobileDangerValue = 45;
+document.getElementById("static-danger-value-input").value = staticDangerValue;
+document.getElementById("mobile-danger-value-input").value = mobileDangerValue;
 
 function generateHistogram(staticValues, mobileValues) {
     //var minValue = Math.min(minStaticLimit, minMobileLimit);
@@ -287,4 +289,48 @@ function drawMobileDangerLine(value){
         .attr("x2", xScale(value))
         .attr("y2", histogramHeight);
       }
+}
+
+function onStaticDangerValueChange(inputElement){
+    if(inputElement.value >= maxStaticLimit){
+        staticDangerValue = maxStaticLimit - inputElement.step;
+        inputElement.value = maxStaticLimit - inputElement.step;
+    }
+    else if(inputElement.value < 0){
+        staticDangerValue = 0;
+        inputElement.value = 0;
+    }
+    else if(inputElement.value == ""){
+        staticDangerValue = 0;
+        inputElement.placeholder = "0";
+    }
+    else{
+        staticDangerValue = inputElement.value;
+    }
+    d3.select(".static-danger-line").remove();
+    drawStaticDangerLine(staticDangerValue);
+    d3.selectAll(".accu-sensor").remove();
+    updateVisualization(currentDate);
+}
+
+function onMobileDangerValueChange(inputElement){
+    if(inputElement.value >= maxMobileLimit){
+        mobileDangerValue = maxMobileLimit - inputElement.step;
+        inputElement.value = maxMobileLimit - inputElement.step;
+    }
+    else if(inputElement.value < 0){
+        mobileDangerValue = 0;
+        inputElement.value = 0;
+    }
+    else if(inputElement.value == ""){
+        mobileDangerValue = 0;
+        inputElement.placeholder = "0";
+    }
+    else{
+        mobileDangerValue = inputElement.value;
+    }
+    d3.select(".mobile-danger-line").remove();
+    drawMobileDangerLine(mobileDangerValue);
+    d3.selectAll(".accu-sensor").remove();
+    updateVisualization(currentDate);
 }

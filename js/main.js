@@ -264,7 +264,7 @@ function getDatesUpUntil(date){
 }
 
 function drawAccuCircles(date){
-  var opacityFactor = 0.065;
+  var opacityFactor = 0.07;
   if(averaging){
     // Accumulating and averaging
     var avgStaticSensors = avgStaticReadings[date];

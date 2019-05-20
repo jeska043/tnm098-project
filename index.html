@@ -36,6 +36,7 @@
     <p class="static-sensor-text">Static sensors</p>
     <p class="show-values-text">Values</p>
     <p class="show-dist-text">Distribution</p>
+    <p class="indication-text">Indication Threshold</p>
     
     <div class="show-dist-checkboxes">
       <input class="static-dist-checkbox" type="checkbox" onchange="toggleShowStaticDist(this)" checked>
@@ -51,6 +52,13 @@
       <option value="average">Average</option>
       <option value="all" selected>All sensors</option>
     </select>
+    <div class="danger-value-form">
+      <input type="number" class="static-danger-value-input" id="static-danger-value-input" min="0" max="100" step="0.1"
+        oninput="onStaticDangerValueChange(this)">
+      <input type="number" class="mobile-danger-value-input" id="mobile-danger-value-input" min="0" max="100" step="0.1"
+      oninput="onMobileDangerValueChange(this)">
+    </div>
+    
 
     <div class="mode-section">
       <label for="mode-select">Mode</label>
