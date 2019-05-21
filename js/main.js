@@ -96,15 +96,19 @@ function updateVisualization(date){
       var staticLineVal = 0;
       for (var sensorId in avgStaticSensors) {
         var reading = avgStaticSensors[sensorId];
-        var xPos = (reading.Long - minLong) / (maxLong - minLong) * imageWidth;
-        var yPos = (1 - (reading.Lat - minLat) / (maxLat - minLat)) * imageHeight;
-        map.append("circle")
-          .attr("class", "current-sensor")
-          .attr("cx", xPos)
-          .attr("cy", yPos)
-          .attr("r", currentSensorRadius)
-          .style("fill", "url(#myGradient)")
-          .style("fill-opacity", (reading.avgValue - staticDangerValue) / (maxStaticLimit - staticDangerValue));
+        var opacity = (reading.avgValue - staticDangerValue) / (maxStaticLimit - staticDangerValue);
+        if (opacity > 0) {
+          var xPos = (reading.Long - minLong) / (maxLong - minLong) * imageWidth;
+          var yPos = (1 - (reading.Lat - minLat) / (maxLat - minLat)) * imageHeight;
+
+          map.append("circle")
+            .attr("class", "current-sensor")
+            .attr("cx", xPos)
+            .attr("cy", yPos)
+            .attr("r", currentSensorRadius)
+            .style("fill", "url(#myGradient)")
+            .style("fill-opacity", opacity);
+        }
   
         if(staticLineMode == "all"){
           drawStaticLine(reading.avgValue);
@@ -124,16 +128,20 @@ function updateVisualization(date){
       var mobileLineVal = 0;
       for (var sensorId in avgMobileSensors) {
         var reading = avgMobileSensors[sensorId];
-        var xPos = (reading.avgLong - minLong) / (maxLong - minLong) * imageWidth;
-        var yPos = (1 - (reading.avgLat - minLat) / (maxLat - minLat)) * imageHeight;
-        map.append("circle")
-          .attr("class", "current-sensor")
-          .attr("cx", xPos)
-          .attr("cy", yPos)
-          .attr("r", currentSensorRadius)
-          .style("fill", "url(#myGradient)")
-          .style("fill-opacity", (reading.avgValue - mobileDangerValue) / (maxMobileLimit - mobileDangerValue));
+        var opacity = (reading.avgValue - mobileDangerValue) / (maxMobileLimit - mobileDangerValue);
+        if (opacity > 0) {
+          var xPos = (reading.avgLong - minLong) / (maxLong - minLong) * imageWidth;
+          var yPos = (1 - (reading.avgLat - minLat) / (maxLat - minLat)) * imageHeight;
 
+          map.append("circle")
+            .attr("class", "current-sensor")
+            .attr("cx", xPos)
+            .attr("cy", yPos)
+            .attr("r", currentSensorRadius)
+            .style("fill", "url(#myGradient)")
+            .style("fill-opacity", opacity);
+        }
+        
         if(mobileLineMode == "all"){
           drawMobileLine(reading.avgValue);
         }
@@ -158,16 +166,20 @@ function updateVisualization(date){
       var staticLineVal = 0;
       for (var i = 0; i < staticData.length; i++) {
         var reading = staticData[i];
-        var xPos = (reading.Long - minLong) / (maxLong - minLong) * imageWidth;
-        var yPos = (1 - (reading.Lat - minLat) / (maxLat - minLat)) * imageHeight;
-        map.append("circle")
-          .attr("class", "current-sensor")
-          .attr("cx", xPos)
-          .attr("cy", yPos)
-          .attr("r", currentSensorRadius)
-          .style("fill", "url(#myGradient)")
-          .style("fill-opacity", (reading.Value - staticDangerValue) / (maxStaticLimit - staticDangerValue));
+        var opacity = (reading.Value - staticDangerValue) / (maxStaticLimit - staticDangerValue);
+        if (opacity > 0) {
+          var xPos = (reading.Long - minLong) / (maxLong - minLong) * imageWidth;
+          var yPos = (1 - (reading.Lat - minLat) / (maxLat - minLat)) * imageHeight;
 
+          map.append("circle")
+            .attr("class", "current-sensor")
+            .attr("cx", xPos)
+            .attr("cy", yPos)
+            .attr("r", currentSensorRadius)
+            .style("fill", "url(#myGradient)")
+            .style("fill-opacity", opacity);
+        }
+        
         if(staticLineMode == "all"){
           drawStaticLine(reading.Value);
         }
@@ -186,15 +198,19 @@ function updateVisualization(date){
       var mobileLineVal = 0;
       for (var i = 0; i < mobileData.length; i++) {
         var reading = mobileData[i];
-        var xPos = (reading.Long - minLong) / (maxLong - minLong) * imageWidth;
-        var yPos = (1 - (reading.Lat - minLat) / (maxLat - minLat)) * imageHeight;
-        map.append("circle")
-          .attr("class", "current-sensor")
-          .attr("cx", xPos)
-          .attr("cy", yPos)
-          .attr("r", currentSensorRadius)
-          .style("fill", "url(#myGradient)")
-          .style("fill-opacity", (reading.Value - mobileDangerValue) / (maxMobileLimit - mobileDangerValue));
+        var opacity = (reading.Value - mobileDangerValue) / (maxMobileLimit - mobileDangerValue);
+        if (opacity > 0) {
+          var xPos = (reading.Long - minLong) / (maxLong - minLong) * imageWidth;
+          var yPos = (1 - (reading.Lat - minLat) / (maxLat - minLat)) * imageHeight;
+
+          map.append("circle")
+            .attr("class", "current-sensor")
+            .attr("cx", xPos)
+            .attr("cy", yPos)
+            .attr("r", currentSensorRadius)
+            .style("fill", "url(#myGradient)")
+            .style("fill-opacity", opacity);
+        }
   
         if(mobileLineMode == "all"){
           drawMobileLine(reading.Value);
@@ -273,31 +289,39 @@ function drawAccuCircles(date){
     // Draw avg static sensors
     for (var sensorId in avgStaticSensors) {
       var reading = avgStaticSensors[sensorId];
-      var xPos = (reading.Long - minLong) / (maxLong - minLong) * imageWidth;
-      var yPos = (1 - (reading.Lat - minLat) / (maxLat - minLat)) * imageHeight;
-      map.append("circle")
-        .attr("class", "accu-sensor")
-        .attr("data-value", date)
-        .attr("cx", xPos)
-        .attr("cy", yPos)
-        .attr("r", accuSensorRadius)
-        .style("fill", "red")
-        .style("fill-opacity", opacityFactor * (reading.avgValue - staticDangerValue) / (maxStaticLimit - staticDangerValue));
+      var opacity = (reading.avgValue - staticDangerValue) / (maxStaticLimit - staticDangerValue);
+      if (opacity > 0) {
+        var xPos = (reading.Long - minLong) / (maxLong - minLong) * imageWidth;
+        var yPos = (1 - (reading.Lat - minLat) / (maxLat - minLat)) * imageHeight;
+
+        map.append("circle")
+          .attr("class", "accu-sensor")
+          .attr("data-value", date)
+          .attr("cx", xPos)
+          .attr("cy", yPos)
+          .attr("r", accuSensorRadius)
+          .style("fill", "red")
+          .style("fill-opacity", opacityFactor * opacity);
+      }  
     }
 
     // Draw avg mobile sensors
     for (var sensorId in avgMobileSensors) {
       var reading = avgMobileSensors[sensorId];
-      var xPos = (reading.avgLong - minLong) / (maxLong - minLong) * imageWidth;
-      var yPos = (1 - (reading.avgLat - minLat) / (maxLat - minLat)) * imageHeight;
-      map.append("circle")
-        .attr("class", "accu-sensor")
-        .attr("data-value", date)
-        .attr("cx", xPos)
-        .attr("cy", yPos)
-        .attr("r", accuSensorRadius)
-        .style("fill", "red")
-        .style("fill-opacity", opacityFactor * (reading.avgValue - mobileDangerValue) / (maxMobileLimit - mobileDangerValue));
+      var opacity = (reading.avgValue - mobileDangerValue) / (maxMobileLimit - mobileDangerValue);
+      if (opacity > 0) {
+        var xPos = (reading.avgLong - minLong) / (maxLong - minLong) * imageWidth;
+        var yPos = (1 - (reading.avgLat - minLat) / (maxLat - minLat)) * imageHeight;
+
+        map.append("circle")
+          .attr("class", "accu-sensor")
+          .attr("data-value", date)
+          .attr("cx", xPos)
+          .attr("cy", yPos)
+          .attr("r", accuSensorRadius)
+          .style("fill", "red")
+          .style("fill-opacity", opacityFactor * opacity);
+      }
     }
   }
   else{
@@ -307,31 +331,39 @@ function drawAccuCircles(date){
     // Draw static sensors
     for (var i = 0; i < staticData.length; i++) {
       var reading = staticData[i];
-      var xPos = (reading.Long - minLong) / (maxLong - minLong) * imageWidth;
-      var yPos = (1 - (reading.Lat - minLat) / (maxLat - minLat)) * imageHeight;
-      map.append("circle")
-        .attr("class", "accu-sensor")
-        .attr("data-value", date)
-        .attr("cx", xPos)
-        .attr("cy", yPos)
-        .attr("r", accuSensorRadius)
-        .style("fill", "red")
-        .style("fill-opacity", opacityFactor * (reading.Value - staticDangerValue) / (maxStaticLimit - staticDangerValue));
+      var opacity = (reading.Value - staticDangerValue) / (maxStaticLimit - staticDangerValue);
+      if (opacity > 0) {
+        var xPos = (reading.Long - minLong) / (maxLong - minLong) * imageWidth;
+        var yPos = (1 - (reading.Lat - minLat) / (maxLat - minLat)) * imageHeight;
+
+        map.append("circle")
+          .attr("class", "accu-sensor")
+          .attr("data-value", date)
+          .attr("cx", xPos)
+          .attr("cy", yPos)
+          .attr("r", accuSensorRadius)
+          .style("fill", "red")
+          .style("fill-opacity", opacityFactor * opacity);
+      }
     }
 
     // Draw mobile sensors
     for (var i = 0; i < mobileData.length; i++) {
       var reading = mobileData[i];
-      var xPos = (reading.Long - minLong) / (maxLong - minLong) * imageWidth;
-      var yPos = (1 - (reading.Lat - minLat) / (maxLat - minLat)) * imageHeight;
-      map.append("circle")
-        .attr("class", "accu-sensor")
-        .attr("data-value", date)
-        .attr("cx", xPos)
-        .attr("cy", yPos)
-        .attr("r", accuSensorRadius)
-        .style("fill", "red")
-        .style("fill-opacity", opacityFactor * (reading.Value - mobileDangerValue) / (maxMobileLimit - mobileDangerValue));
+      var opacity = (reading.Value - mobileDangerValue) / (maxMobileLimit - mobileDangerValue);
+      if (opacity > 0) {
+        var xPos = (reading.Long - minLong) / (maxLong - minLong) * imageWidth;
+        var yPos = (1 - (reading.Lat - minLat) / (maxLat - minLat)) * imageHeight;
+
+        map.append("circle")
+          .attr("class", "accu-sensor")
+          .attr("data-value", date)
+          .attr("cx", xPos)
+          .attr("cy", yPos)
+          .attr("r", accuSensorRadius)
+          .style("fill", "red")
+          .style("fill-opacity", opacityFactor * opacity);
+      }
     }
   }
 }
