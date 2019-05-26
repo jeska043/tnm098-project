@@ -23,7 +23,7 @@ var staticDataLoaded = false;
 var mobileDataLoaded = false;
 
 // Get static sensor data
-console.log("Getting static sensor locations.");
+//console.log("Getting static sensor locations.");
 d3.csv("./data/StaticSensorLocations.csv").then(function(array){
   array.forEach(element => {
     staticSensorLocations[element["Sensor-id"]] = [parseFloat(element.Long), parseFloat(element.Lat)];
@@ -36,10 +36,10 @@ d3.csv("./data/StaticSensorLocations.csv").then(function(array){
       .attr("cy", yPos)
       .attr("r", 1);
   });
-  console.log("Static sensor locations retrieved.")
+  //console.log("Static sensor locations retrieved.")
 })
 .then(function(){
-  console.log("Getting static sensor readings.");
+  //console.log("Getting static sensor readings.");
   d3.csv("./data/StaticSensorReadings.csv").then(function(array){
     array.forEach(element => {
       var sensorId = element["Sensor-id"];
@@ -101,7 +101,7 @@ d3.csv("./data/StaticSensorLocations.csv").then(function(array){
         avgStaticReadings[hour][sensorId].avgValue /= avgStaticReadings[hour][sensorId].count;
       }
     }
-    console.log("Static sensor readings retrieved.");
+    //console.log("Static sensor readings retrieved.");
     staticDataLoaded = true;
     checkLoadStatus();
   })
@@ -114,7 +114,7 @@ d3.csv("./data/StaticSensorLocations.csv").then(function(array){
 });
 
 // Get mobile sensor data
-console.log("Getting mobile sensor readings.");
+//console.log("Getting mobile sensor readings.");
 d3.csv("./data/MobileSensorReadings.csv").then(function(array){
   array.forEach(element => {
     var value = parseFloat(element.Value);
@@ -179,7 +179,7 @@ d3.csv("./data/MobileSensorReadings.csv").then(function(array){
       avgMobileReadings[hour][sensorId].avgLat /= avgMobileReadings[hour][sensorId].count;
     }
   }
-  console.log("Mobile sensor readings retrieved.");
+  //console.log("Mobile sensor readings retrieved.");
   mobileDataLoaded = true;
   checkLoadStatus();
 })

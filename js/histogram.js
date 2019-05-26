@@ -21,7 +21,7 @@ var mobileBins;
 var binWidthPixels;
 var histogram;
 
-var staticDangerValue = 15.1;
+var staticDangerValue = 15;
 var mobileDangerValue = 45;
 document.getElementById("static-danger-value-input").value = staticDangerValue;
 document.getElementById("mobile-danger-value-input").value = mobileDangerValue;
